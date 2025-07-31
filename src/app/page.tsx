@@ -17,7 +17,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-2 text-center">
             <div className="flex justify-center items-center gap-2">
                 <Logo />
-                <CardTitle className="text-3xl font-headline">EDUOS Lite</CardTitle>
+                <CardTitle className="text-3xl font-headline">EDUOS</CardTitle>
             </div>
           <CardDescription>Enter your credentials to access your dashboard</CardDescription>
         </CardHeader>
