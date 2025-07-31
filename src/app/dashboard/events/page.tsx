@@ -1,5 +1,32 @@
 
-export default function EventsManagementPage() {
+import { z } from 'zod';
+import { PlusCircle } from 'lucide-react';
+
+import { columns } from '@/app/dashboard/events/components/columns';
+import { DataTable } from '@/app/dashboard/events/components/data-table';
+import { eventSchema } from '@/app/dashboard/events/data/schema';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { EventForm } from './components/event-form';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent } from '@/components/ui/card';
+
+// Simulate a database read for events.
+async function getEvents() {
+  // In a real app, you'd fetch this from a database.
+  return z.array(eventSchema).parse([]);
+}
+
+export default async function EventsManagementPage() {
+  const events = await getEvents();
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -9,9 +36,44 @@ export default function EventsManagementPage() {
             Manage school events, holidays, and important dates.
           </p>
         </div>
+        <div className="flex items-center space-x-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Event
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Event</DialogTitle>
+                <DialogDescription>
+                  Fill in the details below to add a new event.
+                </DialogDescription>
+              </DialogHeader>
+              <EventForm />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
-       <div className="mt-6">
-         <p className="text-muted-foreground p-4">Events & Calendar module will be displayed here.</p>
+      <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+         <Card className="lg:col-span-2">
+            <CardContent className="p-4">
+                <DataTable data={events} columns={columns} />
+            </CardContent>
+        </Card>
+        <Card>
+             <CardContent className="p-0">
+                <Calendar
+                    mode="single"
+                    className="p-0"
+                    classNames={{
+                        head_cell: 'w-full',
+                        cell: 'w-full',
+                        row: 'w-full flex',
+                    }}
+                />
+            </CardContent>
+        </Card>
       </div>
     </>
   );
