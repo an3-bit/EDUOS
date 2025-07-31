@@ -16,16 +16,18 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TeacherForm } from './components/teacher-form';
+import { getTeachers } from '@/api'; // Import getTeachers from the API service
 
 // Simulate a database read for tasks.
-async function getTeachers() {
-  // In a real app, you'd fetch this from a database.
-  // For now, we'll return an empty array since we don't have a backend.
-  return z.array(teacherSchema).parse([]);
-}
+// async function getTeachers() {
+//   // In a real app, you'd fetch this from a database.
+//   // For now, we'll return an empty array since we don't have a backend.
+//   return z.array(teacherSchema).parse([]);
+// }
 
 export default async function TeacherManagementPage() {
-  const teachers = await getTeachers();
+  const teachersResponse = await getTeachers(); // Use the API service function
+  const teachers = teachersResponse.data; // Access the data from the axios response
 
   return (
     <>

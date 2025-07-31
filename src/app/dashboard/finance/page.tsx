@@ -15,17 +15,33 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TransactionForm } from './components/transaction-form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getBudgets, getInvoices, getPaymentRecords } from '@/api'; // Import API functions
+import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagement'; // Import BudgetManagement
+import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices'; // Import StudentInvoices
+import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing'; // Import PaymentProcessing
 
 // Simulate a database read for transactions.
-async function getTransactions() {
-  // In a real app, you'd fetch this from a database.
-  // For now, we'll return an empty array since we don't have a backend.
-  return z.array(transactionSchema).parse([]);
-}
+// async function getTransactions() {
+//   // In a real app, you&#39;d fetch this from a database.
+//   // For now, we&#39;ll return an empty array since we don&#39;t have a backend.
+//   return z.array(transactionSchema).parse([]);
+// }
 
 export default async function FinanceManagementPage() {
-  const transactions = await getTransactions();
+  // Fetch data using API functions
+  const budgetsResponse = await getBudgets();
+  const budgets = budgetsResponse.data; // Access data from axios response
+
+  const invoicesResponse = await getInvoices();
+  const invoices = invoicesResponse.data; // Access data from axios response
+
+  const paymentsResponse = await getPaymentRecords();
+  const payments = paymentsResponse.data; // Access data from axios response
+
+  // You might still need to fetch transactions if your backend has a specific endpoint for them
+  // const transactionsResponse = await getTransactions();
+  // const transactions = transactionsResponse.data;
 
   return (
     <>
@@ -64,16 +80,20 @@ export default async function FinanceManagementPage() {
                 <TabsTrigger value="budgets">Budgets</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                 <DataTable data={transactions} columns={columns} />
+                 {/* You can decide what to display in the overview tab */}
+                 {/* Maybe a summary or recent transactions */}
+                 {/* For now, we'll keep the transactions DataTable if you have a relevant API */}
+                 {/* <DataTable data={transactions} columns={columns} /> */}
+                 <p className="text-muted-foreground p-4">Overview content goes here.</p>
             </TabsContent>
             <TabsContent value="invoices">
-                <p className="text-muted-foreground p-4">Invoices will be displayed here.</p>
+                <StudentInvoices invoices={invoices} /> {/* Include StudentInvoices */}
             </TabsContent>
             <TabsContent value="payments">
-                 <p className="text-muted-foreground p-4">Payments will be displayed here.</p>
+                 <PaymentProcessing payments={payments} /> {/* Include PaymentProcessing */}
             </TabsContent>
             <TabsContent value="budgets">
-                 <p className="text-muted-foreground p-4">Budgets will be displayed here.</p>
+                 <BudgetManagement budgets={budgets} /> {/* Include BudgetManagement */}
             </TabsContent>
         </Tabs>
       </div>

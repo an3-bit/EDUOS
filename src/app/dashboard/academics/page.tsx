@@ -15,15 +15,24 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ClassForm } from './components/class-form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getClassLevels, getStreams } from '@/api'; // Import API functions
+import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLevelManagement'; // Import ClassLevelManagement
+import StreamManagement from '@/app/dashboard/academics/components/StreamManagement'; // Import StreamManagement
 
 // Simulate a database read for classes.
-async function getClasses() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(classSchema).parse([]);
-}
+// async function getClasses() {
+//   // In a real app, you'd fetch this from a database.
+//   return z.array(classSchema).parse([]);
+// }
 
 export default async function AcademicsManagementPage() {
-  const classes = await getClasses();
+  // Fetch data using API functions
+  const classLevelsResponse = await getClassLevels();
+  const classLevels = classLevelsResponse.data; // Access data from axios response
+
+  const streamsResponse = await getStreams();
+  const streams = streamsResponse.data; // Access data from axios response
 
   return (
     <>
@@ -54,7 +63,19 @@ export default async function AcademicsManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <DataTable data={classes} columns={columns} />
+        <Tabs defaultValue="class-levels">
+            <TabsList>
+                <TabsTrigger value="class-levels">Class Levels</TabsTrigger>
+                <TabsTrigger value="streams">Streams</TabsTrigger>
+                {/* Add triggers for other functionalities like promotions, analytics */}
+            </TabsList>
+            <TabsContent value="class-levels">
+                <ClassLevelManagement classLevels={classLevels} /> {/* Include ClassLevelManagement */}
+            </TabsContent>
+            <TabsContent value="streams">
+                 <StreamManagement streams={streams} /> {/* Include StreamManagement */}
+            </TabsContent>
+        </Tabs>
       </div>
     </>
   );

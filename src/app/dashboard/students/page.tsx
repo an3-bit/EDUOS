@@ -16,16 +16,17 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { StudentForm } from './components/student-form';
+import { getStudents } from '@/api'; // Import getStudents from the API service
 
 // Simulate a database read for tasks.
-async function getStudents() {
-  // In a real app, you'd fetch this from a database.
-  // For now, we'll return an empty array since we don't have a backend.
-  return z.array(studentSchema).parse([]);
-}
+// async function getStudents() {
+//   // In a real app, you'd fetch this from a database.
+//   // For now, we'll return an empty array since we don't have a backend.
+//   return z.array(studentSchema).parse([]);
+// }
 
 export default async function StudentManagementPage() {
-  const students = await getStudents();
+  const students = await getStudents(); // Use the API service function
 
   return (
     <>
@@ -56,7 +57,7 @@ export default async function StudentManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <DataTable data={students} columns={columns} />
+        <DataTable data={students.data} columns={columns} /> {/* Access data from the axios response */}
       </div>
     </>
   );

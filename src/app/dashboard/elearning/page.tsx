@@ -15,16 +15,26 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { CourseForm } from './components/course-form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCourses, getAssignments, getLiveClassSessions } from '@/api'; // Import API functions
+import CourseCatalog from '@/app/dashboard/elearning/components/CourseCatalog'; // Import CourseCatalog
 
 // Simulate a database read for courses.
-async function getCourses() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(courseSchema).parse([]);
-}
+// async function getCourses() {
+//   // In a real app, you'd fetch this from a database.
+//   return z.array(courseSchema).parse([]);
+// }
 
 export default async function ElearningManagementPage() {
-  const courses = await getCourses();
+  // Fetch data using API functions
+  const coursesResponse = await getCourses();
+  const courses = coursesResponse.data; // Access data from axios response
+
+  const assignmentsResponse = await getAssignments();
+  const assignments = assignmentsResponse.data; // Access data from axios response
+
+  const liveClassesResponse = await getLiveClassSessions();
+  const liveClasses = liveClassesResponse.data; // Access data from axios response
 
   return (
     <>
@@ -63,16 +73,19 @@ export default async function ElearningManagementPage() {
                 <TabsTrigger value="live-classes">Live Classes</TabsTrigger>
             </TabsList>
             <TabsContent value="courses">
-                 <DataTable data={courses} columns={columns} />
+                 <CourseCatalog courses={courses} /> {/* Include CourseCatalog */}
             </TabsContent>
             <TabsContent value="lessons">
+                {/* TODO: Integrate CoursePlayer or a lessons list component */}
                 <p className="text-muted-foreground p-4">Lessons will be displayed here.</p>
             </TabsContent>
             <TabsContent value="assignments">
-                 <p className="text-muted-foreground p-4">Assignments will be displayed here.</p>
+                 {/* TODO: Integrate AssignmentManager or display assignments directly */}
+                 <DataTable data={assignments} columns={columns} /> {/* Using existing DataTable for now */}
             </TabsContent>
             <TabsContent value="live-classes">
-                 <p className="text-muted-foreground p-4">Live classes will be displayed here.</p>
+                 {/* TODO: Integrate LiveClasses component or display live sessions */}
+                 <DataTable data={liveClasses} columns={columns} /> {/* Using existing DataTable for now */}
             </TabsContent>
         </Tabs>
       </div>
