@@ -33,7 +33,7 @@ const handleApiError = (error: any, context: string) => {
 
 // Auth APIs
 export const loginUser = (data: any) => api.post('/accounts/login/', { email: data.email, password: data.password });
-export const registerUser = (data: any) => api.post('/accounts/', {
+export const registerUser = (data: any) => api.post('/accounts/register/', {
     email: data.email,
     password: data.password,
     role: data.role,
