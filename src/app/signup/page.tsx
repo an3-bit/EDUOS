@@ -13,13 +13,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { UserRole } from '@/types';
 
-const loginSchema = z.object({
+const signupSchema = z.object({
   email: z.string().email({ message: 'A valid email is required.' }),
-  password: z.string().min(1, { message: 'Password is required.' }),
+  password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
+  role: z.nativeEnum(UserRole, { errorMap: () => ({ message: "Please select a role."}) }),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 const Logo = () => (
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
@@ -27,28 +30,27 @@ const Logo = () => (
     </svg>
 );
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const { toast } = useToast();
 
-  const form = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+  const form = useForm<SignupFormValues>({
+    resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
+  const onSubmit = async (data: SignupFormValues) => {
     try {
-      await login(data.email, data.password);
-      toast({ title: "Login Successful", description: "Redirecting to dashboard..." });
-      router.push('/dashboard');
+      await register(data.email, data.password, data.role);
+      toast({ title: "Registration Successful", description: "Please log in to continue." });
+      router.push('/');
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "Please check your credentials and try again.",
+        title: "Registration Failed",
+        description: "An error occurred during registration. Please try again.",
       });
-      console.error("Login failed:", error);
+      console.error("Registration failed:", error);
     }
   };
 
@@ -60,7 +62,7 @@ export default function LoginPage() {
                 <Logo />
                 <CardTitle className="text-3xl font-headline">EDUOS</CardTitle>
             </div>
-          <CardDescription>Enter your credentials to access your dashboard</CardDescription>
+          <CardDescription>Create your account to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -83,12 +85,7 @@ export default function LoginPage() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                     <div className="flex items-center">
-                        <Label htmlFor="password">Password</Label>
-                        <Link href="#" className="ml-auto inline-block text-sm underline text-muted-foreground hover:text-primary">
-                          Forgot your password?
-                        </Link>
-                      </div>
+                    <Label htmlFor="password">Password</Label>
                     <FormControl>
                       <Input id="password" type="password" {...field} />
                     </FormControl>
@@ -96,15 +93,37 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
+               <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label>Role</Label>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                            {Object.values(UserRole).map((role) => (
+                                <SelectItem key={role} value={role}>{role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full">
-                Login
+                Create Account
               </Button>
             </form>
           </Form>
           <div className="mt-4 text-center text-sm">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline text-muted-foreground hover:text-primary">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/" className="underline text-muted-foreground hover:text-primary">
+              Log in
             </Link>
           </div>
         </CardContent>

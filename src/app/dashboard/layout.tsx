@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { ReactNode } from 'react';
@@ -49,24 +50,27 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from '@/components/ui/sidebar';
+import { useAuth } from '@/context/AuthContext';
+import { UserRole } from '@/types';
 
-const menuItems = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/dashboard/students", label: "Student Management", icon: Users },
-    { href: "/dashboard/teachers", label: "Teacher Management", icon: GraduationCap },
-    { href: "/dashboard/finance", label: "Finance Management", icon: Wallet },
-    { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare },
-    { href: "/dashboard/academics", label: "Classes & Academics", icon: School },
-    { href: "/dashboard/elearning", label: "E-Learning", icon: BookOpen },
-    { href: "/dashboard/library", label: "Library", icon: Library },
-    { href: "/dashboard/timetable", label: "Timetable", icon: CalendarDays },
-    { href: "/dashboard/events", label: "Events & Calendar", icon: Calendar },
-    { href: "/dashboard/health", label: "Medical & Health", icon: HeartPulse },
-    { href: "/dashboard/hostel", label: "Hostel Management", icon: BedDouble },
-    { href: "/dashboard/transport", label: "Transport", icon: Bus },
-    { href: "/dashboard/assessments", label: "Assessments & Exams", icon: ClipboardCheck },
-    { href: "/dashboard/notifications", label: "Notifications", icon: Bell },
-    { href: "/dashboard/parents", label: "Guardian Portal", icon: Shield },
+
+const allMenuItems = [
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.LIBRARIAN, UserRole.FINANCE, UserRole.HOSTEL_MANAGER] },
+    { href: "/dashboard/students", label: "Student Management", icon: Users, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
+    { href: "/dashboard/teachers", label: "Teacher Management", icon: GraduationCap, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
+    { href: "/dashboard/finance", label: "Finance Management", icon: Wallet, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
+    { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
+    { href: "/dashboard/academics", label: "Classes & Academics", icon: School, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
+    { href: "/dashboard/elearning", label: "E-Learning", icon: BookOpen, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
+    { href: "/dashboard/library", label: "Library", icon: Library, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.LIBRARIAN, UserRole.STUDENT, UserRole.TEACHER] },
+    { href: "/dashboard/timetable", label: "Timetable", icon: CalendarDays, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
+    { href: "/dashboard/events", label: "Events & Calendar", icon: Calendar, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
+    { href: "/dashboard/health", label: "Medical & Health", icon: HeartPulse, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
+    { href: "/dashboard/hostel", label: "Hostel Management", icon: BedDouble, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.HOSTEL_MANAGER] },
+    { href: "/dashboard/transport", label: "Transport", icon: Bus, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
+    { href: "/dashboard/assessments", label: "Assessments & Exams", icon: ClipboardCheck, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
+    { href: "/dashboard/notifications", label: "Notifications", icon: Bell, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
+    { href: "/dashboard/parents", label: "Guardian Portal", icon: Shield, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
 ];
 
 const Logo = () => (
@@ -82,10 +86,19 @@ const Logo = () => (
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
+    const { user, logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    };
     
     const isLinkActive = (href: string) => {
         return href === '/dashboard' ? pathname === href : pathname.startsWith(href);
     };
+
+    const menuItems = user ? allMenuItems.filter(item => item.roles.includes(user.role)) : [];
+
 
     return (
         <SidebarProvider>
@@ -140,12 +153,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                             <Button variant="ghost" size="icon" className="rounded-full">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src="https://placehold.co/100x100" alt="Admin" data-ai-hint="person user"/>
-                                    <AvatarFallback>AD</AvatarFallback>
+                                    <AvatarFallback>{user?.email ? user.email.slice(0,2).toUpperCase() : 'AD'}</AvatarFallback>
                                 </Avatar>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>{user?.role || 'Admin'} Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={() => router.push('#')}>
                                 <User className="mr-2 h-4 w-4" />
@@ -156,7 +169,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                 <span>Settings</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={() => router.push('/')}>
+                            <DropdownMenuItem onSelect={handleLogout}>
                                 <LogOut className="mr-2 h-4 w-4" />
                                 <span>Logout</span>
                             </DropdownMenuItem>

@@ -10,10 +10,11 @@ const api = axios.create({
 // Add a request interceptor to include the auth token
 api.interceptors.request.use(
     (config) => {
-        // In a real app, you'd get this token from localStorage or a state manager
-        const token = 'your_auth_token_here'; // TODO: Replace with actual token retrieval
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
         }
         return config;
     },
@@ -22,13 +23,19 @@ api.interceptors.request.use(
     }
 );
 
-
 // Generic error handler
 const handleApiError = (error: any, context: string) => {
     console.error(`API Error in ${context}:`, error);
     // You can add more robust error handling here, like logging to a service
-    return { data: { results: [] } }; // Return a default value to prevent crashes
+    // Return a default value to prevent crashes when the API call fails
+    return { data: { results: [] } };
 };
+
+
+// Auth APIs
+export const loginUser = (data: any) => api.post('/accounts/login/', data);
+export const registerUser = (data: any) => api.post('/accounts/register/', data);
+
 
 // Student Management APIs
 export const getStudents = () => api.get('/students/').catch(e => handleApiError(e, 'getStudents'));
