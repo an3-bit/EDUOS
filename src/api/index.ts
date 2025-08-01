@@ -7,6 +7,22 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
+// Add a request interceptor to include the auth token
+api.interceptors.request.use(
+    (config) => {
+        // In a real app, you'd get this token from localStorage or a state manager
+        const token = 'your_auth_token_here'; // TODO: Replace with actual token retrieval
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+
 // Generic error handler
 const handleApiError = (error: any, context: string) => {
     console.error(`API Error in ${context}:`, error);
