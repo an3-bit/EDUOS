@@ -1,3 +1,4 @@
+
 import { promises as fs } from 'fs';
 import path from 'path';
 import { z } from 'zod';
@@ -26,7 +27,15 @@ import { getStudents } from '@/api'; // Import getStudents from the API service
 // }
 
 export default async function StudentManagementPage() {
-  const students = await getStudents(); // Use the API service function
+  let students = [];
+  try {
+    const studentsResponse = await getStudents(); // Use the API service function
+    students = studentsResponse.data;
+  } catch (error) {
+    console.error("Failed to fetch students:", error);
+    // students will be an empty array
+  }
+
 
   return (
     <>
@@ -57,7 +66,7 @@ export default async function StudentManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <DataTable data={students.data} columns={columns} /> {/* Access data from the axios response */}
+        <DataTable data={students} columns={columns} /> {/* Access data from the axios response */}
       </div>
     </>
   );

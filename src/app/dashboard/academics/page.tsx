@@ -28,11 +28,25 @@ import StreamManagement from '@/app/dashboard/academics/components/StreamManagem
 
 export default async function AcademicsManagementPage() {
   // Fetch data using API functions
-  const classLevelsResponse = await getClassLevels();
-  const classLevels = classLevelsResponse.data; // Access data from axios response
+  let classLevels = [];
+  try {
+    const classLevelsResponse = await getClassLevels();
+    classLevels = classLevelsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch class levels:", error);
+    // Return empty array on error
+  }
 
-  const streamsResponse = await getStreams();
-  const streams = streamsResponse.data; // Access data from axios response
+
+  let streams = [];
+  try {
+    const streamsResponse = await getStreams();
+    streams = streamsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch streams:", error);
+    // Return empty array on error
+  }
+
 
   return (
     <>

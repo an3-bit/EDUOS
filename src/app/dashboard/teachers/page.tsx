@@ -1,3 +1,4 @@
+
 import { promises as fs } from 'fs';
 import path from 'path';
 import { z } from 'zod';
@@ -26,8 +27,13 @@ import { getTeachers } from '@/api'; // Import getTeachers from the API service
 // }
 
 export default async function TeacherManagementPage() {
-  const teachersResponse = await getTeachers(); // Use the API service function
-  const teachers = teachersResponse.data; // Access the data from the axios response
+  let teachers = [];
+  try {
+    const teachersResponse = await getTeachers(); // Use the API service function
+    teachers = teachersResponse.data; // Access the data from the axios response
+  } catch (error) {
+    console.error("Failed to fetch teachers:", error);
+  }
 
   return (
     <>

@@ -30,14 +30,29 @@ import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcess
 
 export default async function FinanceManagementPage() {
   // Fetch data using API functions
-  const budgetsResponse = await getBudgets();
-  const budgets = budgetsResponse.data; // Access data from axios response
+  let budgets = [];
+  try {
+    const budgetsResponse = await getBudgets();
+    budgets = budgetsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch budgets:", error);
+  }
 
-  const invoicesResponse = await getInvoices();
-  const invoices = invoicesResponse.data; // Access data from axios response
+  let invoices = [];
+  try {
+    const invoicesResponse = await getInvoices();
+    invoices = invoicesResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch invoices:", error);
+  }
 
-  const paymentsResponse = await getPaymentRecords();
-  const payments = paymentsResponse.data; // Access data from axios response
+  let payments = [];
+  try {
+    const paymentsResponse = await getPaymentRecords();
+    payments = paymentsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch payments:", error);
+  }
 
   // You might still need to fetch transactions if your backend has a specific endpoint for them
   // const transactionsResponse = await getTransactions();

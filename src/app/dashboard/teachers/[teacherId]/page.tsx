@@ -15,10 +15,19 @@ interface TeacherProfilePageProps {
 
 export default async function TeacherProfilePage({ params }: TeacherProfilePageProps) {
   const { teacherId } = params;
+  
+  let teacher = null;
+  try {
+    // Fetch teacher data using the API function
+    const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
+    teacher = teacherResponse.data; // Access the data from the response
+  } catch (error) {
+    console.error(`Failed to fetch teacher profile for ${teacherId}:`, error);
+  }
 
-  // Fetch teacher data using the API function
-  const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
-  const teacher = teacherResponse.data; // Access the data from the response
+  if (!teacher) {
+    return <div>Teacher not found or failed to load.</div>;
+  }
 
   return (
     <div>

@@ -16,9 +16,18 @@ interface StudentProfilePageProps {
 export default async function StudentProfilePage({ params }: StudentProfilePageProps) {
   const { studentId } = params;
 
-  // Fetch student data using the API function
-  const studentResponse = await getStudentProfile(studentId); // Get the full axios response
-  const student: Student = studentResponse.data; // Access the data from the response and cast to Student type
+  let student: Student | null = null;
+  try {
+    // Fetch student data using the API function
+    const studentResponse = await getStudentProfile(studentId); // Get the full axios response
+    student = studentResponse.data; // Access the data from the response and cast to Student type
+  } catch (error) {
+    console.error(`Failed to fetch student profile for ${studentId}:`, error);
+  }
+
+  if (!student) {
+    return <div>Student not found or failed to load.</div>;
+  }
 
   return (
     <div>

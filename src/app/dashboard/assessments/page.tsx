@@ -16,9 +16,16 @@ import {
 } from '@/components/ui/dialog';
 import { AssessmentForm } from './components/assessment-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getAssignments } from '@/api';
 
 async function getAssessments() {
-  return z.array(assessmentSchema).parse([]);
+  try {
+    const response = await getAssignments();
+    return z.array(assessmentSchema).parse(response.data);
+  } catch (error) {
+    console.error("Failed to fetch assessments:", error);
+    return [];
+  }
 }
 
 export default async function AssessmentsManagementPage() {

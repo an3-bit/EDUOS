@@ -25,8 +25,14 @@ import AttendanceDashboard from '@/app/dashboard/attendance/components/Attendanc
 // }
 
 export default async function AttendanceManagementPage() {
-  const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
-  const attendanceRecords = attendanceRecordsResponse.data; // Access data from axios response
+  let attendanceRecords = [];
+  try {
+    const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
+    attendanceRecords = attendanceRecordsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch attendance records:", error);
+  }
+
 
   return (
     <>

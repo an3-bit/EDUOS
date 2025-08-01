@@ -27,14 +27,29 @@ import CourseCatalog from '@/app/dashboard/elearning/components/CourseCatalog'; 
 
 export default async function ElearningManagementPage() {
   // Fetch data using API functions
-  const coursesResponse = await getCourses();
-  const courses = coursesResponse.data; // Access data from axios response
+  let courses = [];
+  try {
+    const coursesResponse = await getCourses();
+    courses = coursesResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch courses:", error);
+  }
 
-  const assignmentsResponse = await getAssignments();
-  const assignments = assignmentsResponse.data; // Access data from axios response
+  let assignments = [];
+  try {
+    const assignmentsResponse = await getAssignments();
+    assignments = assignmentsResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch assignments:", error);
+  }
 
-  const liveClassesResponse = await getLiveClassSessions();
-  const liveClasses = liveClassesResponse.data; // Access data from axios response
+  let liveClasses = [];
+  try {
+    const liveClassesResponse = await getLiveClassSessions();
+    liveClasses = liveClassesResponse.data; // Access data from axios response
+  } catch (error) {
+    console.error("Failed to fetch live classes:", error);
+  }
 
   return (
     <>
