@@ -22,7 +22,13 @@ import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices'
 import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing'; // Import PaymentProcessing
 
 async function getTransactions() {
-  return z.array(transactionSchema).parse([]);
+  try {
+    const response = await getPaymentRecords();
+    return z.array(transactionSchema).parse(response.data);
+  } catch (error) {
+    console.error("Failed to fetch transactions:", error);
+    return [];
+  }
 }
 
 export default async function FinanceManagementPage() {
@@ -30,14 +36,14 @@ export default async function FinanceManagementPage() {
   let invoices: any[] = [];
   let payments: any[] = [];
   try {
-    // const budgetsResponse = await getBudgets();
-    // budgets = budgetsResponse.data;
+    const budgetsResponse = await getBudgets();
+    budgets = budgetsResponse.data;
 
-    // const invoicesResponse = await getInvoices();
-    // invoices = invoicesResponse.data; 
+    const invoicesResponse = await getInvoices();
+    invoices = invoicesResponse.data; 
 
-    // const paymentsResponse = await getPaymentRecords();
-    // payments = paymentsResponse.data; 
+    const paymentsResponse = await getPaymentRecords();
+    payments = paymentsResponse.data; 
   } catch (error) {
     console.error("Failed to fetch finance data:", error);
   }
@@ -97,3 +103,5 @@ export default async function FinanceManagementPage() {
     </>
   );
 }
+
+    

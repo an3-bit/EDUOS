@@ -22,23 +22,25 @@ import AssignmentManager from './components/AssignmentManager';
 import LiveClasses from './components/LiveClasses';
 
 async function getCoursesData() {
-  return z.array(courseSchema).parse([]);
+  try {
+    const response = await getCourses();
+    return z.array(courseSchema).parse(response.data);
+  } catch (error) {
+    console.error("Failed to fetch courses:", error);
+    return [];
+  }
 }
 
 export default async function ElearningManagementPage() {
-  let courses: any[] = [];
   let assignments: any[] = [];
   let liveClasses: any[] = [];
 
   try {
-    // const coursesResponse = await getCourses();
-    // courses = coursesResponse.data;
+    const assignmentsResponse = await getAssignments();
+    assignments = assignmentsResponse.data;
 
-    // const assignmentsResponse = await getAssignments();
-    // assignments = assignmentsResponse.data;
-
-    // const liveClassesResponse = await getLiveClassSessions();
-    // liveClasses = liveClassesResponse.data;
+    const liveClassesResponse = await getLiveClassSessions();
+    liveClasses = liveClassesResponse.data;
   } catch (error) {
     console.error("Failed to fetch e-learning data:", error);
   }
@@ -81,7 +83,7 @@ export default async function ElearningManagementPage() {
                 <TabsTrigger value="live-classes">Live Classes</TabsTrigger>
             </TabsList>
             <TabsContent value="courses">
-                 <CourseCatalog courses={courses} />
+                 <CourseCatalog courses={courseData} />
             </TabsContent>
             <TabsContent value="assignments">
                  <AssignmentManager assignments={assignments} />
@@ -94,3 +96,5 @@ export default async function ElearningManagementPage() {
     </>
   );
 }
+
+    

@@ -20,23 +20,14 @@ export default async function TeacherProfilePage({ params }: TeacherProfilePageP
   let teacher: any = null; // TODO: Replace 'any' with Teacher interface
   try {
     // Fetch teacher data using the API function
-    // const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
-    // teacher = teacherResponse.data; // Access the data from the response
+    const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
+    teacher = teacherResponse.data; // Access the data from the response
   } catch (error) {
     console.error(`Failed to fetch teacher profile for ${teacherId}:`, error);
   }
 
   if (!teacher) {
-    // return <div>Teacher not found or failed to load.</div>;
-    // Mock teacher for UI development
-    teacher = {
-        id: teacherId,
-        first_name: "Jane",
-        middle_name: "B.",
-        last_name: "Smith",
-        staff_id: `STF-${teacherId}`,
-        job_title: "Mathematics Teacher"
-    }
+    return <div>Teacher not found or failed to load.</div>;
   }
 
   return (
@@ -54,3 +45,5 @@ export default async function TeacherProfilePage({ params }: TeacherProfilePageP
     </div>
   );
 }
+
+    

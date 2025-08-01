@@ -20,25 +20,14 @@ export default async function StudentProfilePage({ params }: StudentProfilePageP
   let student: Student | null = null;
   try {
     // Fetch student data using the API function
-    // const studentResponse = await getStudentProfile(studentId); // Get the full axios response
-    // student = studentResponse.data; // Access the data from the response and cast to Student type
+    const studentResponse = await getStudentProfile(studentId); // Get the full axios response
+    student = studentResponse.data; // Access the data from the response and cast to Student type
   } catch (error) {
     console.error(`Failed to fetch student profile for ${studentId}:`, error);
   }
 
   if (!student) {
-    // return <div>Student not found or failed to load.</div>;
-    // Mock student for UI development
-    student = {
-        id: studentId,
-        first_name: "John",
-        middle_name: "A.",
-        last_name: "Doe",
-        admission_number: `ADM-${studentId}`,
-        date_of_birth: "2010-05-20",
-        gender: "Male",
-        enrollment_status: "Active"
-    }
+    return <div>Student not found or failed to load.</div>;
   }
 
   return (
@@ -56,3 +45,5 @@ export default async function StudentProfilePage({ params }: StudentProfilePageP
     </div>
   );
 }
+
+    

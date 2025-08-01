@@ -21,6 +21,8 @@ import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLeve
 import StreamManagement from '@/app/dashboard/academics/components/StreamManagement';
 
 async function getClasses() {
+  // This should fetch from /api/v1/classes, but there's no specific function for that yet.
+  // Using an empty array for now.
   return z.array(classSchema).parse([]);
 }
 
@@ -28,11 +30,11 @@ export default async function AcademicsManagementPage() {
   let classLevels: any[] = [];
   let streams: any[] = [];
   try {
-    // const classLevelsResponse = await getClassLevels();
-    // classLevels = classLevelsResponse.data; 
+    const classLevelsResponse = await getClassLevels();
+    classLevels = classLevelsResponse.data; 
 
-    // const streamsResponse = await getStreams();
-    // streams = streamsResponse.data;
+    const streamsResponse = await getStreams();
+    streams = streamsResponse.data;
   } catch (error) {
     console.error("Failed to fetch academics data:", error);
   }
@@ -89,3 +91,5 @@ export default async function AcademicsManagementPage() {
     </>
   );
 }
+
+    

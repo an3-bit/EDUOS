@@ -19,19 +19,17 @@ import { getSchoolAttendanceRecords } from '@/api'; // Import API function
 import AttendanceDashboard from '@/app/dashboard/attendance/components/AttendanceDashboard'; // Import AttendanceDashboard
 
 async function getAttendanceRecords() {
-  return z.array(attendanceSchema).parse([]);
+    try {
+        const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
+        return z.array(attendanceSchema).parse(attendanceRecordsResponse.data); // Access data from axios response
+    } catch (error) {
+        console.error("Failed to fetch attendance records:", error);
+        return [];
+    }
 }
 
 export default async function AttendanceManagementPage() {
-  let attendanceRecords = [];
-  try {
-    // const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
-    // attendanceRecords = attendanceRecordsResponse.data; // Access data from axios response
-    attendanceRecords = await getAttendanceRecords();
-  } catch (error) {
-    console.error("Failed to fetch attendance records:", error);
-  }
-
+  const attendanceRecords = await getAttendanceRecords();
 
   return (
     <>
@@ -68,3 +66,5 @@ export default async function AttendanceManagementPage() {
     </>
   );
 }
+
+    

@@ -19,22 +19,17 @@ import { getStudents } from '@/api'; // Import getStudents from the API service
 
 // Simulate a database read for tasks.
 async function getStudentsData() {
-  // In a real app, you'd fetch this from a database.
-  // For now, we'll return an empty array since we don't have a backend.
-  return z.array(studentSchema).parse([]);
+  try {
+    const studentsResponse = await getStudents(); // Use the API service function
+    return z.array(studentSchema).parse(studentsResponse.data);
+  } catch (error) {
+    console.error("Failed to fetch students:", error);
+    return [];
+  }
 }
 
 export default async function StudentManagementPage() {
-  let students = [];
-  try {
-    // const studentsResponse = await getStudents(); // Use the API service function
-    // students = studentsResponse.data;
-    students = await getStudentsData();
-  } catch (error) {
-    console.error("Failed to fetch students:", error);
-    // students will be an empty array
-  }
-
+  const students = await getStudentsData();
 
   return (
     <>
@@ -65,7 +60,7 @@ export default async function StudentManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <DataTable data={students} columns={columns} /> {/* Access data from the axios response */}
+        <DataTable data={students} columns={columns} />
       </div>
     </>
   );
