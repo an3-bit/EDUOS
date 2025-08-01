@@ -1,6 +1,4 @@
 
-import { promises as fs } from 'fs';
-import path from 'path';
 import { z } from 'zod';
 import { PlusCircle } from 'lucide-react';
 
@@ -20,17 +18,18 @@ import { StudentForm } from './components/student-form';
 import { getStudents } from '@/api'; // Import getStudents from the API service
 
 // Simulate a database read for tasks.
-// async function getStudents() {
-//   // In a real app, you'd fetch this from a database.
-//   // For now, we'll return an empty array since we don't have a backend.
-//   return z.array(studentSchema).parse([]);
-// }
+async function getStudentsData() {
+  // In a real app, you'd fetch this from a database.
+  // For now, we'll return an empty array since we don't have a backend.
+  return z.array(studentSchema).parse([]);
+}
 
 export default async function StudentManagementPage() {
   let students = [];
   try {
-    const studentsResponse = await getStudents(); // Use the API service function
-    students = studentsResponse.data;
+    // const studentsResponse = await getStudents(); // Use the API service function
+    // students = studentsResponse.data;
+    students = await getStudentsData();
   } catch (error) {
     console.error("Failed to fetch students:", error);
     // students will be an empty array

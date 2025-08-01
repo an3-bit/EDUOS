@@ -16,40 +16,34 @@ import {
 } from '@/components/ui/dialog';
 import { CourseForm } from './components/course-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getCourses, getAssignments, getLiveClassSessions } from '@/api'; // Import API functions
-import CourseCatalog from '@/app/dashboard/elearning/components/CourseCatalog'; // Import CourseCatalog
+import { getCourses, getAssignments, getLiveClassSessions } from '@/api';
+import CourseCatalog from '@/app/dashboard/elearning/components/CourseCatalog';
+import AssignmentManager from './components/AssignmentManager';
+import LiveClasses from './components/LiveClasses';
 
-// Simulate a database read for courses.
-// async function getCourses() {
-//   // In a real app, you'd fetch this from a database.
-//   return z.array(courseSchema).parse([]);
-// }
+async function getCoursesData() {
+  return z.array(courseSchema).parse([]);
+}
 
 export default async function ElearningManagementPage() {
-  // Fetch data using API functions
-  let courses = [];
+  let courses: any[] = [];
+  let assignments: any[] = [];
+  let liveClasses: any[] = [];
+
   try {
-    const coursesResponse = await getCourses();
-    courses = coursesResponse.data; // Access data from axios response
+    // const coursesResponse = await getCourses();
+    // courses = coursesResponse.data;
+
+    // const assignmentsResponse = await getAssignments();
+    // assignments = assignmentsResponse.data;
+
+    // const liveClassesResponse = await getLiveClassSessions();
+    // liveClasses = liveClassesResponse.data;
   } catch (error) {
-    console.error("Failed to fetch courses:", error);
+    console.error("Failed to fetch e-learning data:", error);
   }
 
-  let assignments = [];
-  try {
-    const assignmentsResponse = await getAssignments();
-    assignments = assignmentsResponse.data; // Access data from axios response
-  } catch (error) {
-    console.error("Failed to fetch assignments:", error);
-  }
-
-  let liveClasses = [];
-  try {
-    const liveClassesResponse = await getLiveClassSessions();
-    liveClasses = liveClassesResponse.data; // Access data from axios response
-  } catch (error) {
-    console.error("Failed to fetch live classes:", error);
-  }
+  const courseData = await getCoursesData();
 
   return (
     <>
@@ -83,24 +77,17 @@ export default async function ElearningManagementPage() {
         <Tabs defaultValue="courses">
             <TabsList>
                 <TabsTrigger value="courses">Courses</TabsTrigger>
-                <TabsTrigger value="lessons">Lessons</TabsTrigger>
                 <TabsTrigger value="assignments">Assignments</TabsTrigger>
                 <TabsTrigger value="live-classes">Live Classes</TabsTrigger>
             </TabsList>
             <TabsContent value="courses">
-                 <CourseCatalog courses={courses} /> {/* Include CourseCatalog */}
-            </TabsContent>
-            <TabsContent value="lessons">
-                {/* TODO: Integrate CoursePlayer or a lessons list component */}
-                <p className="text-muted-foreground p-4">Lessons will be displayed here.</p>
+                 <CourseCatalog courses={courses} />
             </TabsContent>
             <TabsContent value="assignments">
-                 {/* TODO: Integrate AssignmentManager or display assignments directly */}
-                 <DataTable data={assignments} columns={columns} /> {/* Using existing DataTable for now */}
+                 <AssignmentManager assignments={assignments} />
             </TabsContent>
             <TabsContent value="live-classes">
-                 {/* TODO: Integrate LiveClasses component or display live sessions */}
-                 <DataTable data={liveClasses} columns={columns} /> {/* Using existing DataTable for now */}
+                <LiveClasses liveClasses={liveClasses} />
             </TabsContent>
         </Tabs>
       </div>

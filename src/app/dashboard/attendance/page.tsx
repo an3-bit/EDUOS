@@ -18,17 +18,16 @@ import { AttendanceForm } from './components/attendance-form';
 import { getSchoolAttendanceRecords } from '@/api'; // Import API function
 import AttendanceDashboard from '@/app/dashboard/attendance/components/AttendanceDashboard'; // Import AttendanceDashboard
 
-// Simulate a database read for attendance records.
-// async function getAttendanceRecords() {
-//   // In a real app, you'd fetch this from a database.
-//   return z.array(attendanceSchema).parse([]);
-// }
+async function getAttendanceRecords() {
+  return z.array(attendanceSchema).parse([]);
+}
 
 export default async function AttendanceManagementPage() {
   let attendanceRecords = [];
   try {
-    const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
-    attendanceRecords = attendanceRecordsResponse.data; // Access data from axios response
+    // const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
+    // attendanceRecords = attendanceRecordsResponse.data; // Access data from axios response
+    attendanceRecords = await getAttendanceRecords();
   } catch (error) {
     console.error("Failed to fetch attendance records:", error);
   }
@@ -63,7 +62,7 @@ export default async function AttendanceManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <AttendanceDashboard /> {/* Include AttendanceDashboard */}
+        <AttendanceDashboard />
         <DataTable data={attendanceRecords} columns={columns} />
       </div>
     </>

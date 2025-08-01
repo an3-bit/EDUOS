@@ -17,35 +17,27 @@ import {
 import { ClassForm } from './components/class-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getClassLevels, getStreams } from '@/api'; // Import API functions
-import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLevelManagement'; // Import ClassLevelManagement
-import StreamManagement from '@/app/dashboard/academics/components/StreamManagement'; // Import StreamManagement
+import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLevelManagement';
+import StreamManagement from '@/app/dashboard/academics/components/StreamManagement';
 
-// Simulate a database read for classes.
-// async function getClasses() {
-//   // In a real app, you'd fetch this from a database.
-//   return z.array(classSchema).parse([]);
-// }
+async function getClasses() {
+  return z.array(classSchema).parse([]);
+}
 
 export default async function AcademicsManagementPage() {
-  // Fetch data using API functions
-  let classLevels = [];
+  let classLevels: any[] = [];
+  let streams: any[] = [];
   try {
-    const classLevelsResponse = await getClassLevels();
-    classLevels = classLevelsResponse.data; // Access data from axios response
-  } catch (error) {
-    console.error("Failed to fetch class levels:", error);
-    // Return empty array on error
-  }
+    // const classLevelsResponse = await getClassLevels();
+    // classLevels = classLevelsResponse.data; 
 
-
-  let streams = [];
-  try {
-    const streamsResponse = await getStreams();
-    streams = streamsResponse.data; // Access data from axios response
+    // const streamsResponse = await getStreams();
+    // streams = streamsResponse.data;
   } catch (error) {
-    console.error("Failed to fetch streams:", error);
-    // Return empty array on error
+    console.error("Failed to fetch academics data:", error);
   }
+  
+  const classes = await getClasses();
 
 
   return (
@@ -77,17 +69,20 @@ export default async function AcademicsManagementPage() {
         </div>
       </div>
       <div className="mt-6">
-        <Tabs defaultValue="class-levels">
+        <Tabs defaultValue="classes">
             <TabsList>
+                <TabsTrigger value="classes">Classes</TabsTrigger>
                 <TabsTrigger value="class-levels">Class Levels</TabsTrigger>
                 <TabsTrigger value="streams">Streams</TabsTrigger>
-                {/* Add triggers for other functionalities like promotions, analytics */}
             </TabsList>
+            <TabsContent value="classes">
+                 <DataTable data={classes} columns={columns} />
+            </TabsContent>
             <TabsContent value="class-levels">
-                <ClassLevelManagement classLevels={classLevels} /> {/* Include ClassLevelManagement */}
+                <ClassLevelManagement classLevels={classLevels} />
             </TabsContent>
             <TabsContent value="streams">
-                 <StreamManagement streams={streams} /> {/* Include StreamManagement */}
+                 <StreamManagement streams={streams} />
             </TabsContent>
         </Tabs>
       </div>

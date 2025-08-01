@@ -20,8 +20,9 @@ import { getAssignments } from '@/api';
 
 async function getAssessments() {
   try {
-    const response = await getAssignments();
-    return z.array(assessmentSchema).parse(response.data);
+    // const response = await getAssignments();
+    // return z.array(assessmentSchema).parse(response.data);
+    return z.array(assessmentSchema).parse([]);
   } catch (error) {
     console.error("Failed to fetch assessments:", error);
     return [];

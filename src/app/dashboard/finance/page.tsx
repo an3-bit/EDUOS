@@ -21,42 +21,28 @@ import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagemen
 import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices'; // Import StudentInvoices
 import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing'; // Import PaymentProcessing
 
-// Simulate a database read for transactions.
-// async function getTransactions() {
-//   // In a real app, you&#39;d fetch this from a database.
-//   // For now, we&#39;ll return an empty array since we don&#39;t have a backend.
-//   return z.array(transactionSchema).parse([]);
-// }
+async function getTransactions() {
+  return z.array(transactionSchema).parse([]);
+}
 
 export default async function FinanceManagementPage() {
-  // Fetch data using API functions
-  let budgets = [];
+  let budgets: any[] = [];
+  let invoices: any[] = [];
+  let payments: any[] = [];
   try {
-    const budgetsResponse = await getBudgets();
-    budgets = budgetsResponse.data; // Access data from axios response
+    // const budgetsResponse = await getBudgets();
+    // budgets = budgetsResponse.data;
+
+    // const invoicesResponse = await getInvoices();
+    // invoices = invoicesResponse.data; 
+
+    // const paymentsResponse = await getPaymentRecords();
+    // payments = paymentsResponse.data; 
   } catch (error) {
-    console.error("Failed to fetch budgets:", error);
+    console.error("Failed to fetch finance data:", error);
   }
 
-  let invoices = [];
-  try {
-    const invoicesResponse = await getInvoices();
-    invoices = invoicesResponse.data; // Access data from axios response
-  } catch (error) {
-    console.error("Failed to fetch invoices:", error);
-  }
-
-  let payments = [];
-  try {
-    const paymentsResponse = await getPaymentRecords();
-    payments = paymentsResponse.data; // Access data from axios response
-  } catch (error) {
-    console.error("Failed to fetch payments:", error);
-  }
-
-  // You might still need to fetch transactions if your backend has a specific endpoint for them
-  // const transactionsResponse = await getTransactions();
-  // const transactions = transactionsResponse.data;
+  const transactions = await getTransactions();
 
   return (
     <>
@@ -95,20 +81,16 @@ export default async function FinanceManagementPage() {
                 <TabsTrigger value="budgets">Budgets</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-                 {/* You can decide what to display in the overview tab */}
-                 {/* Maybe a summary or recent transactions */}
-                 {/* For now, we'll keep the transactions DataTable if you have a relevant API */}
-                 {/* <DataTable data={transactions} columns={columns} /> */}
-                 <p className="text-muted-foreground p-4">Overview content goes here.</p>
+                 <DataTable data={transactions} columns={columns} />
             </TabsContent>
             <TabsContent value="invoices">
-                <StudentInvoices invoices={invoices} /> {/* Include StudentInvoices */}
+                <StudentInvoices invoices={invoices} />
             </TabsContent>
             <TabsContent value="payments">
-                 <PaymentProcessing payments={payments} /> {/* Include PaymentProcessing */}
+                 <PaymentProcessing payments={payments} />
             </TabsContent>
             <TabsContent value="budgets">
-                 <BudgetManagement budgets={budgets} /> {/* Include BudgetManagement */}
+                 <BudgetManagement budgets={budgets} />
             </TabsContent>
         </Tabs>
       </div>

@@ -1,3 +1,4 @@
+
 import { getTeacherProfile } from '@/api'; // Import the API function
 import TeacherProfileDetails from '@/app/dashboard/teachers/components/TeacherProfileDetails'; // Import the new component
 import TeacherAssignments from '@/app/dashboard/teachers/components/TeacherAssignments'; // Import TeacherAssignments
@@ -16,17 +17,26 @@ interface TeacherProfilePageProps {
 export default async function TeacherProfilePage({ params }: TeacherProfilePageProps) {
   const { teacherId } = params;
   
-  let teacher = null;
+  let teacher: any = null; // TODO: Replace 'any' with Teacher interface
   try {
     // Fetch teacher data using the API function
-    const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
-    teacher = teacherResponse.data; // Access the data from the response
+    // const teacherResponse = await getTeacherProfile(teacherId); // Get the full axios response
+    // teacher = teacherResponse.data; // Access the data from the response
   } catch (error) {
     console.error(`Failed to fetch teacher profile for ${teacherId}:`, error);
   }
 
   if (!teacher) {
-    return <div>Teacher not found or failed to load.</div>;
+    // return <div>Teacher not found or failed to load.</div>;
+    // Mock teacher for UI development
+    teacher = {
+        id: teacherId,
+        first_name: "Jane",
+        middle_name: "B.",
+        last_name: "Smith",
+        staff_id: `STF-${teacherId}`,
+        job_title: "Mathematics Teacher"
+    }
   }
 
   return (
