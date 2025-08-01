@@ -34,38 +34,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setUser({ token, role: decodedToken.role, email: decodedToken.email, firstName: decodedToken.first_name, lastName: decodedToken.last_name });
-        } else {
-          // Token expired
-          localStorage.removeItem('authToken');
-        }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem('authToken');
-      }
+    // For frontend development, we can mock a user
+    const mockUser: User = {
+        token: 'mock-token',
+        role: UserRole.SUPER_ADMIN, // So all sidebar items are visible
+        email: 'admin@eduos.com',
+        firstName: 'Admin',
+        lastName: 'User'
     }
+    setUser(mockUser);
     setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await loginUser({ email, password });
-    const { access: token } = response.data;
-    localStorage.setItem('authToken', token);
-    const decodedToken = jwtDecode<DecodedToken>(token);
-    setUser({ token, role: decodedToken.role, email: decodedToken.email, firstName: decodedToken.first_name, lastName: decodedToken.last_name });
+    // Mock login
+    console.log("Mock login attempt with:", email);
+    const mockUser: User = {
+        token: 'mock-token',
+        role: UserRole.SUPER_ADMIN, // Default to super admin for development
+        email: email,
+        firstName: 'Admin',
+        lastName: 'User'
+    }
+    setUser(mockUser);
+    return Promise.resolve();
   };
 
   const register = async (data: any) => {
-    await registerUser(data);
+    // Mock register
+    console.log("Mock register attempt with:", data);
+    return Promise.resolve();
   };
 
   const logout = () => {
-    localStorage.removeItem('authToken');
     setUser(null);
     router.push('/');
   };

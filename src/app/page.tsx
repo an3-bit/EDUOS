@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -29,7 +28,6 @@ const Logo = () => (
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
   const { toast } = useToast();
 
   const form = useForm<LoginFormValues>({
@@ -37,19 +35,9 @@ export default function LoginPage() {
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = async (data: LoginFormValues) => {
-    try {
-      await login(data.email, data.password);
+  const onSubmit = (data: LoginFormValues) => {
       toast({ title: "Login Successful", description: "Redirecting to dashboard..." });
       router.push('/dashboard');
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: "Please check your credentials and try again.",
-      });
-      console.error("Login failed:", error);
-    }
   };
 
   return (

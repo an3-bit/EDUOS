@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -34,7 +33,6 @@ const Logo = () => (
 
 export default function SignupPage() {
   const router = useRouter();
-  const { register } = useAuth();
   const { toast } = useToast();
 
   const form = useForm<SignupFormValues>({
@@ -44,22 +42,13 @@ export default function SignupPage() {
       lastName: '',
       email: '',
       password: '',
+      role: undefined
     }
   });
 
-  const onSubmit = async (data: SignupFormValues) => {
-    try {
-      await register(data);
+  const onSubmit = (data: SignupFormValues) => {
       toast({ title: "Registration Successful", description: "Please log in to continue." });
       router.push('/');
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Registration Failed",
-        description: "An error occurred during registration. Please try again.",
-      });
-      console.error("Registration failed:", error);
-    }
   };
 
   return (

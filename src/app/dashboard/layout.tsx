@@ -50,7 +50,6 @@ import {
   SidebarTrigger,
   SidebarInset,
 } from '@/components/ui/sidebar';
-import { useAuth } from '@/context/AuthContext';
 import { UserRole } from '@/types';
 
 
@@ -86,10 +85,8 @@ const Logo = () => (
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
-    const { user, logout } = useAuth();
 
     const handleLogout = () => {
-        logout();
         router.push('/');
     };
     
@@ -97,7 +94,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         return href === '/dashboard' ? pathname === href : pathname.startsWith(href);
     };
 
-    const menuItems = user ? allMenuItems.filter(item => item.roles.includes(user.role)) : [];
+    const menuItems = allMenuItems;
 
 
     return (
@@ -153,12 +150,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                             <Button variant="ghost" size="icon" className="rounded-full">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage src="https://placehold.co/100x100" alt="Admin" data-ai-hint="person user"/>
-                                    <AvatarFallback>{user?.email ? user.email.slice(0,2).toUpperCase() : 'AD'}</AvatarFallback>
+                                    <AvatarFallback>AD</AvatarFallback>
                                 </Avatar>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuLabel>{user?.role || 'Admin'} Account</DropdownMenuLabel>
+                            <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={() => router.push('#')}>
                                 <User className="mr-2 h-4 w-4" />
