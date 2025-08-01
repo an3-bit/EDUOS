@@ -32,8 +32,8 @@ const handleApiError = (error: any, context: string) => {
 
 
 // Auth APIs
-export const loginUser = (data: any) => api.post('/accounts/login/', data);
-export const registerUser = (data: any) => api.post('/accounts/', data);
+export const loginUser = (data: any) => api.post('/accounts/login/', { username: data.email, password: data.password });
+export const registerUser = (data: any) => api.post('/admissions/', data);
 
 
 // Student Management APIs
