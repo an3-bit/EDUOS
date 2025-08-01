@@ -26,7 +26,6 @@ api.interceptors.request.use(
 // Generic error handler
 const handleApiError = (error: any, context: string) => {
     console.error(`API Error in ${context}:`, error);
-    // You can add more robust error handling here, like logging to a service
     // Return a default value to prevent crashes when the API call fails
     return { data: { results: [] } };
 };
@@ -34,7 +33,7 @@ const handleApiError = (error: any, context: string) => {
 
 // Auth APIs
 export const loginUser = (data: any) => api.post('/accounts/login/', data);
-export const registerUser = (data: any) => api.post('/accounts/register/', data);
+export const registerUser = (data: any) => api.post('/accounts/', data);
 
 
 // Student Management APIs
