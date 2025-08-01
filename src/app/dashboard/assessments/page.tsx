@@ -19,13 +19,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getAssignments } from '@/api';
 
 async function getAssessments() {
-  try {
-    const response = await getAssignments();
+  const response = await getAssignments();
+  if (response && response.data) {
     return z.array(assessmentSchema).parse(response.data);
-  } catch (error) {
-    console.error("Failed to fetch assessments:", error);
-    return [];
   }
+  return [];
 }
 
 export default async function AssessmentsManagementPage() {
@@ -80,5 +78,3 @@ export default async function AssessmentsManagementPage() {
     </>
   );
 }
-
-    

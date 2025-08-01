@@ -15,17 +15,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { AttendanceForm } from './components/attendance-form';
-import { getSchoolAttendanceRecords } from '@/api'; // Import API function
-import AttendanceDashboard from '@/app/dashboard/attendance/components/AttendanceDashboard'; // Import AttendanceDashboard
+import { getSchoolAttendanceRecords } from '@/api';
+import AttendanceDashboard from '@/app/dashboard/attendance/components/AttendanceDashboard';
 
 async function getAttendanceRecords() {
-    try {
-        const attendanceRecordsResponse = await getSchoolAttendanceRecords(); // Use the API service function
-        return z.array(attendanceSchema).parse(attendanceRecordsResponse.data); // Access data from axios response
-    } catch (error) {
-        console.error("Failed to fetch attendance records:", error);
-        return [];
+    const attendanceRecordsResponse = await getSchoolAttendanceRecords();
+    if (attendanceRecordsResponse && attendanceRecordsResponse.data) {
+        return z.array(attendanceSchema).parse(attendanceRecordsResponse.data);
     }
+    return [];
 }
 
 export default async function AttendanceManagementPage() {
@@ -66,5 +64,3 @@ export default async function AttendanceManagementPage() {
     </>
   );
 }
-
-    

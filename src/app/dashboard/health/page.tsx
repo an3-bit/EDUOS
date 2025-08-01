@@ -15,11 +15,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { HealthRecordForm } from './components/health-record-form';
+import { getMedicalRecords } from '@/api';
 
-// Simulate a database read for health records.
 async function getHealthRecords() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(healthRecordSchema).parse([]);
+  const response = await getMedicalRecords();
+  if (response && response.data) {
+    return z.array(healthRecordSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function HealthManagementPage() {

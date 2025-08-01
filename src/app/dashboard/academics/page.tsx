@@ -16,31 +16,31 @@ import {
 } from '@/components/ui/dialog';
 import { ClassForm } from './components/class-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getClassLevels, getStreams } from '@/api'; // Import API functions
+import { getClasses, getClassLevels, getStreams } from '@/api';
 import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLevelManagement';
 import StreamManagement from '@/app/dashboard/academics/components/StreamManagement';
 
-async function getClasses() {
-  // This should fetch from /api/v1/classes, but there's no specific function for that yet.
-  // Using an empty array for now.
-  return z.array(classSchema).parse([]);
+async function getClassesData() {
+  const response = await getClasses();
+  if (response && response.data) {
+      return z.array(classSchema).parse(response.data);
+  }
+  return [];
+}
+
+async function getAcademicsData() {
+    const classLevelsResponse = await getClassLevels();
+    const streamsResponse = await getStreams();
+
+    return {
+        classLevels: (classLevelsResponse && classLevelsResponse.data) ? classLevelsResponse.data : [],
+        streams: (streamsResponse && streamsResponse.data) ? streamsResponse.data : [],
+    }
 }
 
 export default async function AcademicsManagementPage() {
-  let classLevels: any[] = [];
-  let streams: any[] = [];
-  try {
-    const classLevelsResponse = await getClassLevels();
-    classLevels = classLevelsResponse.data; 
-
-    const streamsResponse = await getStreams();
-    streams = streamsResponse.data;
-  } catch (error) {
-    console.error("Failed to fetch academics data:", error);
-  }
-  
-  const classes = await getClasses();
-
+  const classes = await getClassesData();
+  const { classLevels, streams } = await getAcademicsData();
 
   return (
     <>
@@ -91,5 +91,3 @@ export default async function AcademicsManagementPage() {
     </>
   );
 }
-
-    

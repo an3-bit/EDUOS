@@ -16,39 +16,34 @@ import {
 } from '@/components/ui/dialog';
 import { TransactionForm } from './components/transaction-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getBudgets, getInvoices, getPaymentRecords } from '@/api'; // Import API functions
-import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagement'; // Import BudgetManagement
-import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices'; // Import StudentInvoices
-import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing'; // Import PaymentProcessing
+import { getBudgets, getInvoices, getPaymentRecords } from '@/api';
+import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagement';
+import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices';
+import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing';
 
 async function getTransactions() {
-  try {
-    const response = await getPaymentRecords();
+  const response = await getPaymentRecords();
+  if (response && response.data) {
     return z.array(transactionSchema).parse(response.data);
-  } catch (error) {
-    console.error("Failed to fetch transactions:", error);
-    return [];
   }
+  return [];
+}
+
+async function getFinanceData() {
+    const budgetsResponse = await getBudgets();
+    const invoicesResponse = await getInvoices();
+    const paymentsResponse = await getPaymentRecords();
+
+    return {
+        budgets: (budgetsResponse && budgetsResponse.data) ? budgetsResponse.data : [],
+        invoices: (invoicesResponse && invoicesResponse.data) ? invoicesResponse.data : [],
+        payments: (paymentsResponse && paymentsResponse.data) ? paymentsResponse.data : [],
+    }
 }
 
 export default async function FinanceManagementPage() {
-  let budgets: any[] = [];
-  let invoices: any[] = [];
-  let payments: any[] = [];
-  try {
-    const budgetsResponse = await getBudgets();
-    budgets = budgetsResponse.data;
-
-    const invoicesResponse = await getInvoices();
-    invoices = invoicesResponse.data; 
-
-    const paymentsResponse = await getPaymentRecords();
-    payments = paymentsResponse.data; 
-  } catch (error) {
-    console.error("Failed to fetch finance data:", error);
-  }
-
   const transactions = await getTransactions();
+  const { budgets, invoices, payments } = await getFinanceData();
 
   return (
     <>
@@ -103,5 +98,3 @@ export default async function FinanceManagementPage() {
     </>
   );
 }
-
-    

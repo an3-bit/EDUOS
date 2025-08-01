@@ -16,12 +16,14 @@ import {
 } from '@/components/ui/dialog';
 import { VehicleForm } from './components/vehicle-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getTransportVehicles } from '@/api';
 
-
-// Simulate a database read for vehicles.
 async function getVehicles() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(vehicleSchema).parse([]);
+  const response = await getTransportVehicles();
+  if (response && response.data) {
+    return z.array(vehicleSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function TransportManagementPage() {

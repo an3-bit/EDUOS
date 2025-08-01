@@ -1,12 +1,12 @@
 
-import { getStudentProfile } from '@/api'; // Import the API function
-import StudentProfileDetails from '@/app/dashboard/students/components/StudentProfileDetails'; // Import the new component
-import StudentDocuments from '@/app/dashboard/students/components/StudentDocuments'; // Import StudentDocuments
-import StudentHistory from '@/app/dashboard/students/components/StudentHistory'; // Import StudentHistory
-import MedicalFlags from '@/app/dashboard/students/components/MedicalFlags'; // Import MedicalFlags
-import AcademicSnapshot from '@/app/dashboard/students/components/AcademicSnapshot'; // Import AcademicSnapshot
-import GuardianRelationships from '@/app/dashboard/students/components/GuardianRelationships'; // Import GuardianRelationships
-import { Student } from '@/types'; // Import the Student interface
+import { getStudentProfile } from '@/api';
+import StudentProfileDetails from '@/app/dashboard/students/components/StudentProfileDetails';
+import StudentDocuments from '@/app/dashboard/students/components/StudentDocuments';
+import StudentHistory from '@/app/dashboard/students/components/StudentHistory';
+import MedicalFlags from '@/app/dashboard/students/components/MedicalFlags';
+import AcademicSnapshot from '@/app/dashboard/students/components/AcademicSnapshot';
+import GuardianRelationships from '@/app/dashboard/students/components/GuardianRelationships';
+import { Student } from '@/types';
 
 interface StudentProfilePageProps {
   params: {
@@ -18,12 +18,9 @@ export default async function StudentProfilePage({ params }: StudentProfilePageP
   const { studentId } = params;
 
   let student: Student | null = null;
-  try {
-    // Fetch student data using the API function
-    const studentResponse = await getStudentProfile(studentId); // Get the full axios response
-    student = studentResponse.data; // Access the data from the response and cast to Student type
-  } catch (error) {
-    console.error(`Failed to fetch student profile for ${studentId}:`, error);
+  const studentResponse = await getStudentProfile(studentId);
+  if (studentResponse && studentResponse.data) {
+    student = studentResponse.data as Student;
   }
 
   if (!student) {
@@ -33,17 +30,12 @@ export default async function StudentProfilePage({ params }: StudentProfilePageP
   return (
     <div>
       <h1>Student Profile</h1>
-      {/* Display student data using the fetched 'student' object */}
-      <StudentProfileDetails student={student} /> {/* Use the StudentProfileDetails component */}
-
-      {/* Integrate other student profile components here */}
-      <StudentDocuments studentId={studentId} /> {/* Include StudentDocuments */}
-      <StudentHistory studentId={studentId} /> {/* Include StudentHistory */}
-      <MedicalFlags studentId={studentId} /> {/* Include MedicalFlags */}
-      <AcademicSnapshot studentId={studentId} /> {/* Include AcademicSnapshot */}
-      <GuardianRelationships studentId={studentId} /> {/* Include GuardianRelationships */}
+      <StudentProfileDetails student={student} />
+      <StudentDocuments studentId={studentId} />
+      <StudentHistory studentId={studentId} />
+      <MedicalFlags studentId={studentId} />
+      <AcademicSnapshot studentId={studentId} />
+      <GuardianRelationships studentId={studentId} />
     </div>
   );
 }
-
-    

@@ -15,12 +15,15 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { BookForm } from './components/book-form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getLibraryBooks } from '@/api';
 
-// Simulate a database read for books.
 async function getBooks() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(bookSchema).parse([]);
+  const response = await getLibraryBooks();
+  if (response && response.data) {
+    return z.array(bookSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function LibraryManagementPage() {

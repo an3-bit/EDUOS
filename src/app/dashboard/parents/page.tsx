@@ -18,13 +18,18 @@ import { GuardianForm } from './components/guardian-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getGuardians } from '@/api';
 
-async function getGuardians() {
-  return z.array(guardianSchema).parse([]);
+async function getGuardiansData() {
+  const response = await getGuardians();
+  if (response && response.data) {
+    return z.array(guardianSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function GuardianPortalPage() {
-  const guardians = await getGuardians();
+  const guardians = await getGuardiansData();
 
   return (
     <>

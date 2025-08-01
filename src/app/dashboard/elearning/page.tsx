@@ -22,30 +22,26 @@ import AssignmentManager from './components/AssignmentManager';
 import LiveClasses from './components/LiveClasses';
 
 async function getCoursesData() {
-  try {
-    const response = await getCourses();
+  const response = await getCourses();
+  if (response && response.data) {
     return z.array(courseSchema).parse(response.data);
-  } catch (error) {
-    console.error("Failed to fetch courses:", error);
-    return [];
   }
+  return [];
+}
+
+async function getElearningData() {
+    const assignmentsResponse = await getAssignments();
+    const liveClassesResponse = await getLiveClassSessions();
+
+    return {
+        assignments: (assignmentsResponse && assignmentsResponse.data) ? assignmentsResponse.data : [],
+        liveClasses: (liveClassesResponse && liveClassesResponse.data) ? liveClassesResponse.data : [],
+    }
 }
 
 export default async function ElearningManagementPage() {
-  let assignments: any[] = [];
-  let liveClasses: any[] = [];
-
-  try {
-    const assignmentsResponse = await getAssignments();
-    assignments = assignmentsResponse.data;
-
-    const liveClassesResponse = await getLiveClassSessions();
-    liveClasses = liveClassesResponse.data;
-  } catch (error) {
-    console.error("Failed to fetch e-learning data:", error);
-  }
-
   const courseData = await getCoursesData();
+  const { assignments, liveClasses } = await getElearningData();
 
   return (
     <>
@@ -96,5 +92,3 @@ export default async function ElearningManagementPage() {
     </>
   );
 }
-
-    

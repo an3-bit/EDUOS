@@ -15,16 +15,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TeacherForm } from './components/teacher-form';
-import { getTeachers } from '@/api'; // Import getTeachers from the API service
+import { getTeachers } from '@/api';
 
 async function getTeachersData() {
-  try {
-    const teachersResponse = await getTeachers(); // Use the API service function
-    return z.array(teacherSchema).parse(teachersResponse.data);
-  } catch (error) {
-    console.error("Failed to fetch teachers:", error);
+    const teachersResponse = await getTeachers();
+    if (teachersResponse && teachersResponse.data) {
+        return z.array(teacherSchema).parse(teachersResponse.data);
+    }
     return [];
-  }
 }
 
 export default async function TeacherManagementPage() {
@@ -64,5 +62,3 @@ export default async function TeacherManagementPage() {
     </>
   );
 }
-
-    

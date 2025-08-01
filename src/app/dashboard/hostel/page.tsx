@@ -16,12 +16,14 @@ import {
 } from '@/components/ui/dialog';
 import { RoomForm } from './components/room-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getHostelRooms } from '@/api';
 
-
-// Simulate a database read for rooms.
 async function getRooms() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(roomSchema).parse([]);
+  const response = await getHostelRooms();
+  if (response && response.data) {
+    return z.array(roomSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function HostelManagementPage() {

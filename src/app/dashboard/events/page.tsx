@@ -17,15 +17,18 @@ import {
 import { EventForm } from './components/event-form';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent } from '@/components/ui/card';
+import { getEvents } from '@/api';
 
-// Simulate a database read for events.
-async function getEvents() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(eventSchema).parse([]);
+async function getEventsData() {
+  const response = await getEvents();
+  if (response && response.data) {
+    return z.array(eventSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function EventsManagementPage() {
-  const events = await getEvents();
+  const events = await getEventsData();
 
   return (
     <>

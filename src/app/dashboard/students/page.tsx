@@ -15,17 +15,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { StudentForm } from './components/student-form';
-import { getStudents } from '@/api'; // Import getStudents from the API service
+import { getStudents } from '@/api';
 
-// Simulate a database read for tasks.
 async function getStudentsData() {
-  try {
-    const studentsResponse = await getStudents(); // Use the API service function
+  const studentsResponse = await getStudents();
+  if (studentsResponse && studentsResponse.data) {
     return z.array(studentSchema).parse(studentsResponse.data);
-  } catch (error) {
-    console.error("Failed to fetch students:", error);
-    return [];
   }
+  return [];
 }
 
 export default async function StudentManagementPage() {

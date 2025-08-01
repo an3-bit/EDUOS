@@ -15,11 +15,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { TimetableForm } from './components/timetable-form';
+import { getTimetable } from '@/api';
 
-// Simulate a database read for timetable entries.
 async function getTimetableEntries() {
-  // In a real app, you'd fetch this from a database.
-  return z.array(timetableSchema).parse([]);
+  const response = await getTimetable();
+  if (response && response.data) {
+    return z.array(timetableSchema).parse(response.data);
+  }
+  return [];
 }
 
 export default async function TimetableManagementPage() {
