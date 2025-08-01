@@ -11,7 +11,7 @@ const api = axios.create({
 const handleApiError = (error: any, context: string) => {
     console.error(`API Error in ${context}:`, error);
     // You can add more robust error handling here, like logging to a service
-    return { data: [] }; // Return a default value to prevent crashes
+    return { data: { results: [] } }; // Return a default value to prevent crashes
 };
 
 // Student Management APIs
@@ -43,7 +43,7 @@ export const getExpenseRecords = () => api.get('/finance/expenses/').catch(e => 
 export const recordExpense = (data: any) => api.post('/finance/expenses/', data);
 export const getInvoices = () => api.get('/finance/invoices/').catch(e => handleApiError(e, 'getInvoices'));
 export const generateInvoice = (data: any) => api.post('/finance/invoices/', data);
-export const getPaymentRecords = () => api.get('/finance/payments/').catch(e => handleApiError(e, 'getPaymentRecords'));
+export const getPaymentRecords = () => api.get('/finance/').catch(e => handleApiError(e, 'getPaymentRecords'));
 export const processPayment = (data: any) => api.post('/finance/payments/', data);
 export const getStudentWallet = (studentId: string) => api.get(`/finance/wallet/${studentId}/`).catch(e => handleApiError(e, `getStudentWallet(${studentId})`));
 export const performWalletTransaction = (studentId: string, data: any) => api.post(`/finance/wallet/${studentId}/transaction/`, data);
