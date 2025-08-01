@@ -11,7 +11,7 @@ interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (email: string, password: string, role: UserRole) => Promise<void>;
+  register: (data: any) => Promise<void>;
   loading: boolean;
 }
 
@@ -23,6 +23,8 @@ interface DecodedToken {
     // Add other properties from your token payload here
     role: UserRole; 
     email: string;
+    first_name: string;
+    last_name: string;
 }
 
 
@@ -37,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       try {
         const decodedToken = jwtDecode<DecodedToken>(token);
         if (decodedToken.exp * 1000 > Date.now()) {
-          setUser({ token, role: decodedToken.role, email: decodedToken.email });
+          setUser({ token, role: decodedToken.role, email: decodedToken.email, firstName: decodedToken.first_name, lastName: decodedToken.last_name });
         } else {
           // Token expired
           localStorage.removeItem('authToken');
@@ -55,11 +57,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { access: token } = response.data;
     localStorage.setItem('authToken', token);
     const decodedToken = jwtDecode<DecodedToken>(token);
-    setUser({ token, role: decodedToken.role, email: decodedToken.email });
+    setUser({ token, role: decodedToken.role, email: decodedToken.email, firstName: decodedToken.first_name, lastName: decodedToken.last_name });
   };
 
-  const register = async (email: string, password: string, role: UserRole) => {
-    await registerUser({ email, password, role });
+  const register = async (data: any) => {
+    await registerUser(data);
   };
 
   const logout = () => {

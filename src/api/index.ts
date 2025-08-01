@@ -32,13 +32,13 @@ const handleApiError = (error: any, context: string) => {
 
 
 // Auth APIs
-export const loginUser = (data: any) => api.post('/accounts/login/', { username: data.email, password: data.password });
+export const loginUser = (data: any) => api.post('/accounts/login/', { email: data.email, password: data.password });
 export const registerUser = (data: any) => api.post('/accounts/', {
     email: data.email,
     password: data.password,
     role: data.role,
-    // Add other necessary fields for registration if the backend requires them
-    // e.g., first_name: 'Default', last_name: 'User'
+    first_name: data.firstName,
+    last_name: data.lastName,
 });
 
 

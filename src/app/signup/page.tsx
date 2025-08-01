@@ -17,6 +17,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { UserRole } from '@/types';
 
 const signupSchema = z.object({
+  firstName: z.string().min(1, { message: 'First name is required.' }),
+  lastName: z.string().min(1, { message: 'Last name is required.' }),
   email: z.string().email({ message: 'A valid email is required.' }),
   password: z.string().min(8, { message: 'Password must be at least 8 characters.' }),
   role: z.nativeEnum(UserRole, { errorMap: () => ({ message: "Please select a role."}) }),
@@ -38,6 +40,8 @@ export default function SignupPage() {
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
     }
@@ -45,7 +49,7 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
-      await register(data.email, data.password, data.role);
+      await register(data);
       toast({ title: "Registration Successful", description: "Please log in to continue." });
       router.push('/');
     } catch (error) {
@@ -71,6 +75,34 @@ export default function SignupPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                 <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                    <FormItem>
+                        <Label htmlFor="firstName">First Name</Label>
+                        <FormControl>
+                        <Input id="firstName" placeholder="John" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                    <FormItem>
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <FormControl>
+                        <Input id="lastName" placeholder="Doe" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="email"

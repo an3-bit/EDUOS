@@ -20,6 +20,8 @@ export interface User {
     token: string;
     role: UserRole;
     email: string;
+    firstName: string;
+    lastName: string;
 }
 
 export interface Student {
