@@ -19,8 +19,8 @@ import { getMedicalRecords } from '@/api';
 
 async function getHealthRecords() {
   const response = await getMedicalRecords();
-  if (response && response.data) {
-    return z.array(healthRecordSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(healthRecordSchema).parse(response.data.results);
   }
   return [];
 }

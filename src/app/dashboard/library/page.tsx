@@ -20,8 +20,8 @@ import { getLibraryBooks } from '@/api';
 
 async function getBooks() {
   const response = await getLibraryBooks();
-  if (response && response.data) {
-    return z.array(bookSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(bookSchema).parse(response.data.results);
   }
   return [];
 }

@@ -19,8 +19,8 @@ import { getStudents } from '@/api';
 
 async function getStudentsData() {
   const studentsResponse = await getStudents();
-  if (studentsResponse && studentsResponse.data) {
-    return z.array(studentSchema).parse(studentsResponse.data);
+  if (studentsResponse && studentsResponse.data && Array.isArray(studentsResponse.data.results)) {
+    return z.array(studentSchema).parse(studentsResponse.data.results);
   }
   return [];
 }

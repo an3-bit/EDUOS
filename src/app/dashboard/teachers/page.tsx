@@ -19,8 +19,8 @@ import { getTeachers } from '@/api';
 
 async function getTeachersData() {
     const teachersResponse = await getTeachers();
-    if (teachersResponse && teachersResponse.data) {
-        return z.array(teacherSchema).parse(teachersResponse.data);
+    if (teachersResponse && teachersResponse.data && Array.isArray(teachersResponse.data.results)) {
+        return z.array(teacherSchema).parse(teachersResponse.data.results);
     }
     return [];
 }

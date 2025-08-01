@@ -23,8 +23,8 @@ import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcess
 
 async function getTransactions() {
   const response = await getPaymentRecords();
-  if (response && response.data) {
-    return z.array(transactionSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(transactionSchema).parse(response.data.results);
   }
   return [];
 }
@@ -34,10 +34,14 @@ async function getFinanceData() {
     const invoicesResponse = await getInvoices();
     const paymentsResponse = await getPaymentRecords();
 
+    const budgets = (budgetsResponse && budgetsResponse.data && Array.isArray(budgetsResponse.data.results)) ? budgetsResponse.data.results : [];
+    const invoices = (invoicesResponse && invoicesResponse.data && Array.isArray(invoicesResponse.data.results)) ? invoicesResponse.data.results : [];
+    const payments = (paymentsResponse && paymentsResponse.data && Array.isArray(paymentsResponse.data.results)) ? paymentsResponse.data.results : [];
+
     return {
-        budgets: (budgetsResponse && budgetsResponse.data) ? budgetsResponse.data : [],
-        invoices: (invoicesResponse && invoicesResponse.data) ? invoicesResponse.data : [],
-        payments: (paymentsResponse && paymentsResponse.data) ? paymentsResponse.data : [],
+        budgets,
+        invoices,
+        payments,
     }
 }
 

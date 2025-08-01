@@ -20,8 +20,8 @@ import { getHostelRooms } from '@/api';
 
 async function getRooms() {
   const response = await getHostelRooms();
-  if (response && response.data) {
-    return z.array(roomSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(roomSchema).parse(response.data.results);
   }
   return [];
 }

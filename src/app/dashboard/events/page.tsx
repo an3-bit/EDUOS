@@ -21,8 +21,8 @@ import { getEvents } from '@/api';
 
 async function getEventsData() {
   const response = await getEvents();
-  if (response && response.data) {
-    return z.array(eventSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(eventSchema).parse(response.data.results);
   }
   return [];
 }

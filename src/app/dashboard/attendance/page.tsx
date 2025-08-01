@@ -20,8 +20,8 @@ import AttendanceDashboard from '@/app/dashboard/attendance/components/Attendanc
 
 async function getAttendanceRecords() {
     const attendanceRecordsResponse = await getSchoolAttendanceRecords();
-    if (attendanceRecordsResponse && attendanceRecordsResponse.data) {
-        return z.array(attendanceSchema).parse(attendanceRecordsResponse.data);
+    if (attendanceRecordsResponse && attendanceRecordsResponse.data && Array.isArray(attendanceRecordsResponse.data.results)) {
+        return z.array(attendanceSchema).parse(attendanceRecordsResponse.data.results);
     }
     return [];
 }

@@ -19,8 +19,8 @@ import { getTimetable } from '@/api';
 
 async function getTimetableEntries() {
   const response = await getTimetable();
-  if (response && response.data) {
-    return z.array(timetableSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(timetableSchema).parse(response.data.results);
   }
   return [];
 }

@@ -23,8 +23,8 @@ import LiveClasses from './components/LiveClasses';
 
 async function getCoursesData() {
   const response = await getCourses();
-  if (response && response.data) {
-    return z.array(courseSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(courseSchema).parse(response.data.results);
   }
   return [];
 }
@@ -32,10 +32,13 @@ async function getCoursesData() {
 async function getElearningData() {
     const assignmentsResponse = await getAssignments();
     const liveClassesResponse = await getLiveClassSessions();
+    
+    const assignments = (assignmentsResponse && assignmentsResponse.data && Array.isArray(assignmentsResponse.data.results)) ? assignmentsResponse.data.results : [];
+    const liveClasses = (liveClassesResponse && liveClassesResponse.data && Array.isArray(liveClassesResponse.data.results)) ? liveClassesResponse.data.results : [];
 
     return {
-        assignments: (assignmentsResponse && assignmentsResponse.data) ? assignmentsResponse.data : [],
-        liveClasses: (liveClassesResponse && liveClassesResponse.data) ? liveClassesResponse.data : [],
+        assignments,
+        liveClasses,
     }
 }
 

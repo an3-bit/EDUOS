@@ -22,8 +22,8 @@ import StreamManagement from '@/app/dashboard/academics/components/StreamManagem
 
 async function getClassesData() {
   const response = await getClasses();
-  if (response && response.data) {
-      return z.array(classSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+      return z.array(classSchema).parse(response.data.results);
   }
   return [];
 }
@@ -32,9 +32,12 @@ async function getAcademicsData() {
     const classLevelsResponse = await getClassLevels();
     const streamsResponse = await getStreams();
 
+    const classLevels = (classLevelsResponse && classLevelsResponse.data && Array.isArray(classLevelsResponse.data.results)) ? classLevelsResponse.data.results : [];
+    const streams = (streamsResponse && streamsResponse.data && Array.isArray(streamsResponse.data.results)) ? streamsResponse.data.results : [];
+
     return {
-        classLevels: (classLevelsResponse && classLevelsResponse.data) ? classLevelsResponse.data : [],
-        streams: (streamsResponse && streamsResponse.data) ? streamsResponse.data : [],
+        classLevels,
+        streams,
     }
 }
 

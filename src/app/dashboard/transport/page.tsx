@@ -20,8 +20,8 @@ import { getTransportVehicles } from '@/api';
 
 async function getVehicles() {
   const response = await getTransportVehicles();
-  if (response && response.data) {
-    return z.array(vehicleSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(vehicleSchema).parse(response.data.results);
   }
   return [];
 }

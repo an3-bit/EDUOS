@@ -22,8 +22,8 @@ import { getGuardians } from '@/api';
 
 async function getGuardiansData() {
   const response = await getGuardians();
-  if (response && response.data) {
-    return z.array(guardianSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(guardianSchema).parse(response.data.results);
   }
   return [];
 }

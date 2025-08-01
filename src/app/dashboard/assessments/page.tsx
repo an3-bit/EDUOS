@@ -20,8 +20,8 @@ import { getAssignments } from '@/api';
 
 async function getAssessments() {
   const response = await getAssignments();
-  if (response && response.data) {
-    return z.array(assessmentSchema).parse(response.data);
+  if (response && response.data && Array.isArray(response.data.results)) {
+    return z.array(assessmentSchema).parse(response.data.results);
   }
   return [];
 }
