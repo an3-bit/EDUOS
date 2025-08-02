@@ -3,6 +3,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -14,12 +15,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Assessment } from "@/app/dashboard/assessments/data/schema"
+import { Exam } from "@/app/dashboard/assessments/data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { Badge } from "@/components/ui/badge"
 
 
-export const columns: ColumnDef<Assessment>[] = [
+export const columns: ColumnDef<Exam>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -43,33 +44,27 @@ export const columns: ColumnDef<Assessment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Title" />
+        <DataTableColumnHeader column={column} title="Exam Name" />
     ),
   },
     {
-    accessorKey: "class",
+    accessorKey: "classLevel",
     header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Class" />
     ),
   },
    {
-    accessorKey: "subject",
+    accessorKey: "term",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Subject" />
+        <DataTableColumnHeader column={column} title="Term" />
     ),
   },
   {
-    accessorKey: "date",
+    accessorKey: "year",
      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Date" />
-    ),
-  },
-    {
-    accessorKey: "maxMarks",
-    header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Max Marks" />
+        <DataTableColumnHeader column={column} title="Year" />
     ),
   },
   {
@@ -79,8 +74,8 @@ export const columns: ColumnDef<Assessment>[] = [
     ),
     cell: ({ row }) => {
       const status = row.getValue("status") as string
-       const variant: "default" | "secondary" | "outline" =
-        status === "Graded" ? "default" : status === "Completed" ? "secondary" : "outline";
+       const variant: "default" | "secondary" | "outline" | "destructive" =
+        status === "Graded" ? "default" : status === "Published" ? "secondary" : status === "Archived" ? "destructive" : "outline";
       return <Badge variant={variant}>{status}</Badge>
     },
      filterFn: (row, id, value) => {
@@ -90,7 +85,7 @@ export const columns: ColumnDef<Assessment>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const assessment = row.original
+      const exam = row.original
 
       return (
         <DropdownMenu>
@@ -102,14 +97,16 @@ export const columns: ColumnDef<Assessment>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(assessment.id)}
-            >
-              Copy assessment ID
+            <DropdownMenuItem>
+              <Link href={`/dashboard/assessments/${exam.id}/scores`}>Enter Scores</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/dashboard/assessments/${exam.id}/results`}>View Results</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-            <DropdownMenuItem>Enter grades</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`/dashboard/assessments/edit/${exam.id}`}>Edit Exam</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
