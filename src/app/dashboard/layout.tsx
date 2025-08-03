@@ -28,7 +28,8 @@ import {
   Users,
   Wallet,
   BarChart3,
-  UserPlus
+  UserPlus,
+  DollarSign
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -85,6 +86,7 @@ const allMenuItems = [
         ] 
     },
     { href: "/dashboard/finance", label: "Finance Management", icon: Wallet, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
+    { href: "/dashboard/fee", label: "Fee Management", icon: DollarSign, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
     { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
     { href: "/dashboard/academics", label: "Classes & Academics", icon: School, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
     { href: "/dashboard/elearning", label: "E-Learning", icon: BookOpen, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
@@ -154,7 +156,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                 {item.subItems.map(subItem => (
                                                     <SidebarMenuSubItem key={subItem.href}>
                                                         <Link href={subItem.href} passHref asChild>
-                                                            <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
+                                                            <SidebarMenuSubButton asChild isActive={isLinkActive(subItem.href)}>
                                                                     <subItem.icon />
                                                                     <span>{subItem.label}</span>
                                                             </SidebarMenuSubButton>
