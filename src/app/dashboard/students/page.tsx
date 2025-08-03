@@ -1,3 +1,4 @@
+"use client"
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Users, BarChart3, PieChart, AlertTriangle } from "lucide-react";
