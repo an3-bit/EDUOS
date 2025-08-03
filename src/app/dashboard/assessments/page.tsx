@@ -15,7 +15,6 @@ import AIPredictionsPage from '@/app/dashboard/assessments/components/AIPredicti
 import AutomationSettingsPage from '@/app/dashboard/assessments/components/AutomationSettingsPage';
 
 async function getExamsData() {
-  const response = await getExams();
   // Since we are mocking, we can create some sample data.
   const sampleExams = [
     { id: '1', name: 'Mid-Term Exams', classLevel: 'Grade 5', term: 'Term 2', year: 2024, status: 'Graded' },
