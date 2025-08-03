@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Transaction } from "@/app/dashboard/finance/data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
+import { Badge } from "@/components/ui/badge"
 
 
 export const columns: ColumnDef<Transaction>[] = [
@@ -79,6 +80,15 @@ export const columns: ColumnDef<Transaction>[] = [
      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Status" />
     ),
+     cell: ({ row }) => {
+      const status = row.getValue("status") as string;
+      const variant: "default" | "secondary" | "destructive" =
+        status === "Paid" ? "default" : status === "Pending" ? "secondary" : "destructive";
+      return <Badge variant={variant}>{status}</Badge>;
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
   },
   {
     id: "actions",

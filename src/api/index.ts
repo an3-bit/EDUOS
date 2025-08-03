@@ -27,7 +27,10 @@ export const getStudentHistory = (studentId: string) => Promise.resolve({ data: 
 export const getStudentAcademicSnapshots = (studentId: string) => Promise.resolve({ data: { results: [] } });
 export const getStudentGuardians = (studentId: string) => Promise.resolve({ data: { results: [] } });
 
-export const getTeachers = () => Promise.resolve({ data: { results: [] } });
+export const getTeachers = () => Promise.resolve({ data: { results: [
+    { id: '1', staff_id: 'TCH-001', first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com', phone_number: '123-456-7890', job_title: 'Lead Math Teacher', is_active: true, gender: 'Male' as 'Male', employment_type: 'Full-time' as 'Full-time' },
+    { id: '2', staff_id: 'TCH-002', first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', phone_number: '098-765-4321', job_title: 'History Teacher', is_active: false, gender: 'Female' as 'Female', employment_type: 'Full-time' as 'Full-time' },
+] } });
 export const getTeacherProfile = (teacherId: string) => Promise.resolve({ data: { id: teacherId, name: 'Mr. Smith' } });
 export const updateTeacherProfile = (teacherId: string, data: any) => Promise.resolve({ data: {} });
 export const getTeacherAssignments = (teacherId: string) => Promise.resolve({ data: { results: [] } });
@@ -36,15 +39,25 @@ export const getTeacherPerformance = (teacherId: string) => Promise.resolve({ da
 export const getTeacherLeave = (teacherId: string) => Promise.resolve({ data: { results: [] } });
 export const submitLeaveRequest = (teacherId: string, data: any) => Promise.resolve({ data: {} });
 
-export const getBudgets = () => Promise.resolve({ data: { results: [] } });
+export const getBudgets = () => Promise.resolve({ data: { results: [
+    { id: '1', title: '2024 Academic Year Budget', total_allocation: 500000, total_spent: 120000, academic_year: '2024', term: 'Annual' },
+    { id: '2', title: 'Q1 2024 Sports Budget', total_allocation: 25000, total_spent: 15000, academic_year: '2024', term: 'Term 1' },
+] } });
 export const createBudget = (data: any) => Promise.resolve({ data: {} });
 export const getIncomeRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordIncome = (data: any) => Promise.resolve({ data: {} });
 export const getExpenseRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordExpense = (data: any) => Promise.resolve({ data: {} });
-export const getInvoices = () => Promise.resolve({ data: { results: [] } });
+export const getInvoices = () => Promise.resolve({ data: { results: [
+    { id: '1', student: 'John Doe', invoice_number: 'INV-001', issued_on: new Date(), due_date: new Date(), total_amount: 500, amount_paid: 500, balance: 0, status: 'Paid'},
+    { id: '2', student: 'Jane Smith', invoice_number: 'INV-002', issued_on: new Date(), due_date: new Date(), total_amount: 750, amount_paid: 0, balance: 750, status: 'Pending'},
+] } });
 export const generateInvoice = (data: any) => Promise.resolve({ data: {} });
-export const getPaymentRecords = () => Promise.resolve({ data: { results: [] } });
+export const getPaymentRecords = () => Promise.resolve({ data: { results: [
+     { id: '1', invoiceNumber: 'INV-001', studentName: 'John Doe', amount: 500, date: new Date().toISOString(), status: 'Paid' },
+     { id: '2', invoiceNumber: 'INV-002', studentName: 'Jane Smith', amount: 0, date: new Date().toISOString(), status: 'Pending' },
+     { id: '3', invoiceNumber: 'INV-003', studentName: 'Peter Jones', amount: 600, date: new Date(Date.now() - 86400000 * 30).toISOString(), status: 'Overdue' },
+] } });
 export const processPayment = (data: any) => Promise.resolve({ data: {} });
 export const getStudentWallet = (studentId: string) => Promise.resolve({ data: {} });
 export const performWalletTransaction = (studentId: string, data: any) => Promise.resolve({ data: {} });

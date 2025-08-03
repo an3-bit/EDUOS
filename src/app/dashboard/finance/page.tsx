@@ -20,11 +20,21 @@ import { getBudgets, getInvoices, getPaymentRecords } from '@/api';
 import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagement';
 import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices';
 import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 
 async function getTransactions() {
   const response = await getPaymentRecords();
-  if (response && response.data && Array.isArray(response.data.results)) {
-    return z.array(transactionSchema).parse(response.data.results);
+   if (response && response.data && Array.isArray(response.data.results)) {
+    // Manually map to the expected schema, since mock data is simple
+    const transactions = response.data.results.map((t: any) => ({
+      id: t.id,
+      invoiceNumber: t.invoiceNumber,
+      studentName: t.studentName,
+      amount: t.amount,
+      date: new Date(t.date).toLocaleDateString(),
+      status: t.status,
+    }));
+    return z.array(transactionSchema).parse(transactions);
   }
   return [];
 }
@@ -79,11 +89,13 @@ export default async function FinanceManagementPage() {
       </div>
       <div className="mt-6">
         <Tabs defaultValue="overview">
-            <TabsList>
+            <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="invoices">Invoices</TabsTrigger>
                 <TabsTrigger value="payments">Payments</TabsTrigger>
                 <TabsTrigger value="budgets">Budgets</TabsTrigger>
+                <TabsTrigger value="approvals">Approvals</TabsTrigger>
+                <TabsTrigger value="reports">Reports</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
                  <DataTable data={transactions} columns={columns} />
@@ -96,6 +108,28 @@ export default async function FinanceManagementPage() {
             </TabsContent>
             <TabsContent value="budgets">
                  <BudgetManagement budgets={budgets} />
+            </TabsContent>
+            <TabsContent value="approvals">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Approval Requests</CardTitle>
+                        <CardDescription>Pending refund and waiver approvals.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">Approval requests will be displayed here.</p>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="reports">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Financial Reports</CardTitle>
+                        <CardDescription>Generated financial reports and analytics.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">Reports will be displayed here.</p>
+                    </CardContent>
+                </Card>
             </TabsContent>
         </Tabs>
       </div>
