@@ -2,7 +2,7 @@
 "use client"
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Users, BarChart3, PieChart, CheckCircle, XCircle, Plane } from "lucide-react";
+import { Users, BarChart3, CheckCircle, XCircle, Plane } from "lucide-react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -11,6 +11,8 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  PieChart,
+  Pie,
 } from "recharts";
 
 const departmentData = [
