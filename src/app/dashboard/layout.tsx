@@ -157,7 +157,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                     {item.subItems.map(subItem => (
                                                         <SidebarMenuSubItem key={subItem.href}>
                                                             <Link href={subItem.href} passHref asChild>
-                                                                <SidebarMenuSubButton asChild isActive={isLinkActive(subItem.href)}>
+                                                                <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
                                                                     <>
                                                                         <subItem.icon />
                                                                         <span>{subItem.label}</span>
@@ -244,4 +244,3 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </SidebarProvider>
         </DataProvider>
     );
-}
