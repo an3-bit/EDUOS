@@ -16,10 +16,13 @@ import AutomationSettingsPage from '@/app/dashboard/assessments/components/Autom
 
 async function getExamsData() {
   const response = await getExams();
-  if (response && response.data && Array.isArray(response.data.results)) {
-    return z.array(examSchema).parse(response.data.results);
-  }
-  return [];
+  // Since we are mocking, we can create some sample data.
+  const sampleExams = [
+    { id: '1', name: 'Mid-Term Exams', classLevel: 'Grade 5', term: 'Term 2', year: 2024, status: 'Graded' },
+    { id: '2', name: 'Final Exams', classLevel: 'Grade 5', term: 'Term 3', year: 2024, status: 'Published' },
+    { id: '3', name: 'Weekly Quiz 1', classLevel: 'Grade 4', term: 'Term 2', year: 2024, status: 'Draft' },
+  ];
+  return z.array(examSchema).parse(sampleExams);
 }
 
 export default async function ExamsManagementPage() {
