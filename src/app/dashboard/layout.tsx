@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import * as React from 'react';
@@ -153,11 +154,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                 {item.subItems.map(subItem => (
                                                     <SidebarMenuSubItem key={subItem.href}>
                                                         <Link href={subItem.href} passHref asChild>
-                                                            <SidebarMenuSubButton asChild isActive={isLinkActive(subItem.href)}>
-                                                                <a >
+                                                            <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
                                                                     <subItem.icon />
                                                                     <span>{subItem.label}</span>
-                                                                </a>
                                                             </SidebarMenuSubButton>
                                                         </Link>
                                                     </SidebarMenuSubItem>
