@@ -73,7 +73,16 @@ const allMenuItems = [
             { href: "/dashboard/students/create", label: "New Admission", icon: UserPlus },
         ] 
     },
-    { href: "/dashboard/teachers", label: "Teacher Management", icon: GraduationCap, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
+    { 
+        label: "Teacher Management", 
+        icon: GraduationCap, 
+        roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN],
+        subItems: [
+            { href: "/dashboard/teachers", label: "Analytics", icon: BarChart3 },
+            { href: "/dashboard/teachers/list", label: "All Teachers", icon: Users },
+            { href: "/dashboard/teachers/create", label: "Add Teacher", icon: UserPlus },
+        ] 
+    },
     { href: "/dashboard/finance", label: "Finance Management", icon: Wallet, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
     { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
     { href: "/dashboard/academics", label: "Classes & Academics", icon: School, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
@@ -143,7 +152,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                             <SidebarMenuSub>
                                                 {item.subItems.map(subItem => (
                                                     <SidebarMenuSubItem key={subItem.href}>
-                                                        <Link href={subItem.href} passHref>
+                                                        <Link href={subItem.href} passHref asChild>
                                                             <SidebarMenuSubButton asChild isActive={isLinkActive(subItem.href)}>
                                                                 <a >
                                                                     <subItem.icon />

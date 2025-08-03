@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -15,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Teacher } from "@/app/dashboard/teachers/data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
+import { Badge } from "@/components/ui/badge"
 
 
 export const columns: ColumnDef<Teacher>[] = [
@@ -41,21 +43,22 @@ export const columns: ColumnDef<Teacher>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "staff_id",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Teacher ID" />
+        <DataTableColumnHeader column={column} title="Staff ID" />
     ),
   },
   {
-    accessorKey: "name",
+    accessorFn: row => `${row.first_name} ${row.last_name}`,
+    id: "name",
      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" />
     ),
   },
     {
-    accessorKey: "subject",
+    accessorKey: "job_title",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Subject" />
+        <DataTableColumnHeader column={column} title="Job Title" />
     ),
   },
   {
@@ -65,10 +68,21 @@ export const columns: ColumnDef<Teacher>[] = [
     ),
   },
   {
+    accessorKey: "phone_number",
+     header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Phone" />
+    ),
+  },
+   {
     accessorKey: "status",
      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Status" />
     ),
+     cell: ({ row }) => {
+      const status = row.original.is_active
+      const variant: "default" | "secondary" = status ? "default" : "secondary"
+      return <Badge variant={variant}>{status ? 'Active' : 'Inactive'}</Badge>
+    },
   },
   {
     id: "actions",
@@ -85,14 +99,13 @@ export const columns: ColumnDef<Teacher>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(teacher.id)}
-            >
-              Copy teacher ID
+            <DropdownMenuItem>
+              <Link href={`/dashboard/teachers/${teacher.id}`}>View teacher details</Link>
+            </DropdownMenuItem>
+             <DropdownMenuItem>
+                <Link href={`/dashboard/teachers/edit/${teacher.id}`}>Edit teacher</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View teacher details</DropdownMenuItem>
-            <DropdownMenuItem>Edit teacher</DropdownMenuItem>
              <DropdownMenuItem className="text-red-600">Delete teacher</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
