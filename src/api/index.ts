@@ -13,13 +13,10 @@ const handleError = (error: any) => {
     return { data: { results: [] } };
 };
 
-// Mock API calls
-export const getStudents = () => Promise.resolve({ data: { results: [
-    { id: '1', admission_number: 'STU-001', first_name: 'John', last_name: 'Doe', gender: 'Male', class_level: 'Grade 5', enrollment_status: 'Active', date_of_birth: new Date('2010-05-15') },
-    { id: '2', admission_number: 'STU-002', first_name: 'Jane', last_name: 'Smith', gender: 'Female', class_level: 'Grade 4', enrollment_status: 'Active', date_of_birth: new Date('2011-08-20') },
-    { id: '3', admission_number: 'STU-003', first_name: 'Peter', last_name: 'Jones', gender: 'Male', class_level: 'Grade 5', enrollment_status: 'Suspended', date_of_birth: new Date('2010-07-22') },
-] } });
-export const getStudentProfile = (studentId: string) => Promise.resolve({ data: { id: studentId, first_name: 'John', last_name: 'Doe' } });
+// These functions are now just placeholders.
+// The mock data has been moved to src/lib/assets.ts and is provided via DataContext.
+export const getStudents = () => Promise.resolve({ data: { results: [] } });
+export const getStudentProfile = (studentId: string) => Promise.resolve({ data: {} });
 export const updateStudentProfile = (studentId: string, data: any) => Promise.resolve({ data: {} });
 export const getStudentDocuments = (studentId: string) => Promise.resolve({ data: { results: [] } });
 export const uploadStudentDocument = (studentId: string, data: FormData) => Promise.resolve({ data: {} });
@@ -27,11 +24,8 @@ export const getStudentHistory = (studentId: string) => Promise.resolve({ data: 
 export const getStudentAcademicSnapshots = (studentId: string) => Promise.resolve({ data: { results: [] } });
 export const getStudentGuardians = (studentId: string) => Promise.resolve({ data: { results: [] } });
 
-export const getTeachers = () => Promise.resolve({ data: { results: [
-    { id: '1', staff_id: 'TCH-001', first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com', phone_number: '123-456-7890', job_title: 'Lead Math Teacher', is_active: true, gender: 'Male' as 'Male', employment_type: 'Full-time' as 'Full-time' },
-    { id: '2', staff_id: 'TCH-002', first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', phone_number: '098-765-4321', job_title: 'History Teacher', is_active: false, gender: 'Female' as 'Female', employment_type: 'Full-time' as 'Full-time' },
-] } });
-export const getTeacherProfile = (teacherId: string) => Promise.resolve({ data: { id: teacherId, name: 'Mr. Smith' } });
+export const getTeachers = () => Promise.resolve({ data: { results: [] } });
+export const getTeacherProfile = (teacherId: string) => Promise.resolve({ data: {} });
 export const updateTeacherProfile = (teacherId: string, data: any) => Promise.resolve({ data: {} });
 export const getTeacherAssignments = (teacherId: string) => Promise.resolve({ data: { results: [] } });
 export const getTeacherSchedule = (teacherId: string) => Promise.resolve({ data: { results: [] } });
@@ -39,25 +33,15 @@ export const getTeacherPerformance = (teacherId: string) => Promise.resolve({ da
 export const getTeacherLeave = (teacherId: string) => Promise.resolve({ data: { results: [] } });
 export const submitLeaveRequest = (teacherId: string, data: any) => Promise.resolve({ data: {} });
 
-export const getBudgets = () => Promise.resolve({ data: { results: [
-    { id: '1', title: '2024 Academic Year Budget', total_allocation: 500000, total_spent: 120000, academic_year: '2024', term: 'Annual' },
-    { id: '2', title: 'Q1 2024 Sports Budget', total_allocation: 25000, total_spent: 15000, academic_year: '2024', term: 'Term 1' },
-] } });
+export const getBudgets = () => Promise.resolve({ data: { results: [] } });
 export const createBudget = (data: any) => Promise.resolve({ data: {} });
 export const getIncomeRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordIncome = (data: any) => Promise.resolve({ data: {} });
 export const getExpenseRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordExpense = (data: any) => Promise.resolve({ data: {} });
-export const getInvoices = () => Promise.resolve({ data: { results: [
-    { id: '1', student: 'John Doe', invoice_number: 'INV-001', issued_on: new Date(), due_date: new Date(), total_amount: 500, amount_paid: 500, balance: 0, status: 'Paid'},
-    { id: '2', student: 'Jane Smith', invoice_number: 'INV-002', issued_on: new Date(), due_date: new Date(), total_amount: 750, amount_paid: 0, balance: 750, status: 'Pending'},
-] } });
+export const getInvoices = () => Promise.resolve({ data: { results: [] } });
 export const generateInvoice = (data: any) => Promise.resolve({ data: {} });
-export const getPaymentRecords = () => Promise.resolve({ data: { results: [
-     { id: '1', invoiceNumber: 'INV-001', studentName: 'John Doe', amount: 500, date: new Date().toISOString(), status: 'Paid' },
-     { id: '2', invoiceNumber: 'INV-002', studentName: 'Jane Smith', amount: 0, date: new Date().toISOString(), status: 'Pending' },
-     { id: '3', invoiceNumber: 'INV-003', studentName: 'Peter Jones', amount: 600, date: new Date(Date.now() - 86400000 * 30).toISOString(), status: 'Overdue' },
-] } });
+export const getPaymentRecords = () => Promise.resolve({ data: { results: [] } });
 export const processPayment = (data: any) => Promise.resolve({ data: {} });
 export const getStudentWallet = (studentId: string) => Promise.resolve({ data: {} });
 export const performWalletTransaction = (studentId: string, data: any) => Promise.resolve({ data: {} });
@@ -102,11 +86,7 @@ export const getTransportVehicles = () => Promise.resolve({ data: { results: [] 
 
 
 // Library API Mocks
-export const getLibraryBooks = () => Promise.resolve({ data: { results: [
-    { id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', isbn: '9780743273565', status: 'Available' },
-    { id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', isbn: '9780061120084', status: 'Borrowed' },
-    { id: '3', title: '1984', author: 'George Orwell', isbn: '9780451524935', status: 'Available' },
-]}});
+export const getLibraryBooks = () => Promise.resolve({ data: { results: [] }});
 export const getBookCopies = () => Promise.resolve({ data: { results: [] } });
 export const getBorrowTransactions = () => Promise.resolve({ data: { results: [] } });
 export const getLibraryFines = () => Promise.resolve({ data: { results: [] } });
@@ -114,10 +94,7 @@ export const getLibraryFines = () => Promise.resolve({ data: { results: [] } });
 
 export const getTimetable = () => Promise.resolve({ data: { results: [] } });
 
-export const getExams = () => Promise.resolve({ data: { results: [
-    { id: '1', name: 'Mid-Term Exams', classLevel: 'Grade 5', term: 'Term 2', year: 2024, status: 'Graded' },
-    { id: '2', name: 'Final Exams', classLevel: 'Grade 5', term: 'Term 3', year: 2024, status: 'Published' },
-]}});
+export const getExams = () => Promise.resolve({ data: { results: [] }});
 export const createExam = (data: any) => Promise.resolve({ data: {} });
 export const getExamDetails = (id: string) => Promise.resolve({ data: {} });
 export const updateExam = (id: string, data: any) => Promise.resolve({ data: {} });
@@ -139,14 +116,8 @@ export const generateAIQuestions = (data: any) => Promise.resolve({ data: {} });
 export const uploadExamForOCR = (data: FormData, type: 'image' | 'pdf') => Promise.resolve({ data: {} });
 
 // Guardian API mocks
-export const getGuardians = () => Promise.resolve({ data: { results: [
-    { id: '1', user: 'user1', institution: 'inst1', phone_number: '123-456-7890', email: 'jane.doe@example.com', is_active: true, user_details: { first_name: 'Jane', last_name: 'Doe' }, linked_students: [{name: 'John Doe', relationship: 'Mother'}] },
-    { id: '2', user: 'user2', institution: 'inst1', phone_number: '098-765-4321', email: 'john.smith@example.com', is_active: false, user_details: { first_name: 'John', last_name: 'Smith' }, linked_students: [{name: 'Emily Smith', relationship: 'Father'}] },
-] } });
-export const getGuardianNotifications = () => Promise.resolve({ data: { results: [
-    {id: '1', guardian: '1', guardian_name: 'Jane Doe', title: 'Fee Reminder', message: 'Please note that the school fees for Term 2 are due next week.', type: 'fee_balance', is_read: false, timestamp: new Date().toISOString()},
-    {id: '2', guardian: '2', guardian_name: 'John Smith', title: 'Exam Results Published', message: 'The results for the mid-term exams are now available on the portal.', type: 'exam_update', is_read: true, timestamp: new Date(Date.now() - 86400000).toISOString()},
-] } });
+export const getGuardians = () => Promise.resolve({ data: { results: [] } });
+export const getGuardianNotifications = () => Promise.resolve({ data: { results: [] } });
 
 // Auth is mocked directly in AuthContext for now
 export const loginUser = (data: any) => Promise.resolve({ data: { access: 'mock-token' } });

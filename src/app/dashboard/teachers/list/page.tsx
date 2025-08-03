@@ -1,23 +1,16 @@
 
-import { z } from 'zod';
+"use client";
+
 import { PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 
 import { columns } from '@/app/dashboard/teachers/components/columns';
 import { DataTable } from '@/app/dashboard/teachers/components/data-table';
-import { teacherSchema } from '@/app/dashboard/teachers/data/schema';
 import { Button } from '@/components/ui/button';
+import { useData } from '@/context/DataContext';
 
-// Mock function to get teacher data
-function getMockTeachers() {
-  return [
-    { id: '1', staff_id: 'TCH-001', first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com', phone_number: '123-456-7890', job_title: 'Lead Math Teacher', is_active: true, gender: 'Male', employment_type: 'Full-time' },
-    { id: '2', staff_id: 'TCH-002', first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', phone_number: '098-765-4321', job_title: 'History Teacher', is_active: false, gender: 'Female', employment_type: 'Full-time' },
-  ];
-}
-
-export default async function TeacherListPage() {
-  const teachers = z.array(teacherSchema).parse(getMockTeachers());
+export default function TeacherListPage() {
+  const { teachers } = useData();
 
   return (
     <>

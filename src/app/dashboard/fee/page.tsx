@@ -1,10 +1,10 @@
 
-import { z } from 'zod';
+"use client";
+
 import { PlusCircle } from 'lucide-react';
 
 import { columns } from '@/app/dashboard/fee/components/columns';
 import { DataTable } from '@/app/dashboard/fee/components/data-table';
-import { invoiceSchema } from '@/app/dashboard/fee/data/schema';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,24 +16,16 @@ import {
 } from '@/components/ui/dialog';
 import { InvoiceForm } from './components/invoice-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getInvoices } from '@/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useData } from '@/context/DataContext';
 
-async function getInvoicesData() {
-  const response = await getInvoices();
-  if (response && response.data && Array.isArray(response.data.results)) {
-    const transformedData = response.data.results.map((invoice: any) => ({
+export default function FeeManagementPage() {
+  const { invoices } = useData();
+  const formattedInvoices = invoices.map((invoice: any) => ({
       ...invoice,
       issued_on: new Date(invoice.issued_on).toLocaleDateString(),
       due_date: new Date(invoice.due_date).toLocaleDateString(),
-    }))
-    return z.array(invoiceSchema.partial()).parse(transformedData);
-  }
-  return [];
-}
-
-export default async function FeeManagementPage() {
-  const invoices = await getInvoicesData();
+    }));
 
   return (
     <>
@@ -96,7 +88,7 @@ export default async function FeeManagementPage() {
                 </Card>
             </TabsContent>
              <TabsContent value="invoices">
-                 <DataTable data={invoices} columns={columns} />
+                 <DataTable data={formattedInvoices} columns={columns} />
             </TabsContent>
             <TabsContent value="payments">
                 <Card>

@@ -1,10 +1,10 @@
 
-import { z } from 'zod';
+"use client";
+
 import { PlusCircle, MessageSquare } from 'lucide-react';
 
 import { columns } from '@/app/dashboard/parents/components/columns';
 import { DataTable } from '@/app/dashboard/parents/components/data-table';
-import { guardianSchema, guardianNotificationSchema } from '@/app/dashboard/parents/data/schema';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -18,52 +18,17 @@ import { GuardianForm } from './components/guardian-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getGuardians, getGuardianNotifications } from '@/api';
+import { useData } from '@/context/DataContext';
 
-async function getGuardiansData() {
-  const response = await getGuardians();
-  if (response && response.data && Array.isArray(response.data.results)) {
-    // Manually add fields for table display if they don't come from the API
-    const augmentedResults = response.data.results.map((guardian: any) => ({
+export default function GuardianPortalPage() {
+  const { guardians, guardianNotifications, linkedStudents } = useData();
+
+  const augmentedGuardians = guardians.map((guardian: any) => ({
       ...guardian,
       name: `${guardian.user_details?.first_name || 'N/A'} ${guardian.user_details?.last_name || 'N/A'}`,
       studentName: guardian.linked_students?.map((s:any) => s.name).join(', ') || 'N/A',
       status: guardian.is_active ? 'Active' : 'Inactive',
     }));
-    return z.array(guardianSchema.partial()).parse(augmentedResults);
-  }
-  return [];
-}
-
-async function getCommunicationData() {
-    const response = await getGuardianNotifications();
-    if(response.data.results) {
-        return z.array(guardianNotificationSchema.partial()).parse(response.data.results);
-    }
-    return [];
-}
-
-async function getLinkedStudentsData() {
-    // This is a mock, in a real scenario you would fetch all links
-    const guardiansResponse = await getGuardians();
-    if (guardiansResponse.data.results) {
-        const links = guardiansResponse.data.results.flatMap((g: any) => 
-            g.linked_students.map((s: any) => ({
-                guardianName: `${g.user_details.first_name} ${g.user_details.last_name}`,
-                studentName: s.name,
-                relationship: s.relationship,
-            }))
-        );
-        return links;
-    }
-    return [];
-}
-
-
-export default async function GuardianPortalPage() {
-  const guardians = await getGuardiansData();
-  const communications = await getCommunicationData();
-  const linkedStudents = await getLinkedStudentsData();
 
   return (
     <>
@@ -104,7 +69,7 @@ export default async function GuardianPortalPage() {
                  <TabsTrigger value="linked-students">Linked Students</TabsTrigger>
             </TabsList>
             <TabsContent value="guardians">
-                 <DataTable data={guardians} columns={columns} />
+                 <DataTable data={augmentedGuardians} columns={columns} />
             </TabsContent>
             <TabsContent value="communication">
                 <Card>
@@ -113,7 +78,7 @@ export default async function GuardianPortalPage() {
                         <CardDescription>A log of all notifications sent to guardians.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        {communications.map((comm: any) => (
+                        {guardianNotifications.map((comm: any) => (
                              <div key={comm.id} className="flex items-start gap-4">
                                 <Avatar>
                                     <AvatarImage src="https://placehold.co/100x100" data-ai-hint="person user"/>
@@ -138,7 +103,7 @@ export default async function GuardianPortalPage() {
                     </CardHeader>
                     <CardContent>
                         <ul className="divide-y divide-border">
-                           {linkedStudents.map((link, index) => (
+                           {linkedStudents.map((link: any, index: any) => (
                                <li key={index} className="py-3 flex justify-between items-center">
                                    <div>
                                         <span className="font-semibold">{link.guardianName}</span>

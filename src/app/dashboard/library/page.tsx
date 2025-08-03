@@ -1,10 +1,10 @@
 
-import { z } from 'zod';
+"use client";
+
 import { PlusCircle } from 'lucide-react';
 
 import { columns } from '@/app/dashboard/library/components/columns';
 import { DataTable } from '@/app/dashboard/library/components/data-table';
-import { bookSchema } from '@/app/dashboard/library/data/schema';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,19 +16,11 @@ import {
 } from '@/components/ui/dialog';
 import { BookForm } from './components/book-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getLibraryBooks } from '@/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useData } from '@/context/DataContext';
 
-async function getBooks() {
-  const response = await getLibraryBooks();
-  if (response && response.data && Array.isArray(response.data.results)) {
-    return z.array(bookSchema.partial()).parse(response.data.results);
-  }
-  return [];
-}
-
-export default async function LibraryManagementPage() {
-  const books = await getBooks();
+export default function LibraryManagementPage() {
+  const { libraryBooks } = useData();
 
   return (
     <>
@@ -79,7 +71,7 @@ export default async function LibraryManagementPage() {
                 </Card>
             </TabsContent>
             <TabsContent value="books">
-                 <DataTable data={books} columns={columns} />
+                 <DataTable data={libraryBooks} columns={columns} />
             </TabsContent>
             <TabsContent value="borrowing">
                 <Card>

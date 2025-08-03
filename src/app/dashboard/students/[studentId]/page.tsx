@@ -1,10 +1,9 @@
 
+"use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Student } from "@/types";
 import { BrainCircuit, FileText, HeartPulse, History, Shield, User } from "lucide-react";
 import AcademicSnapshot from "../components/AcademicSnapshot";
 import GuardianRelationships from "../components/GuardianRelationships";
@@ -13,40 +12,15 @@ import StudentDocuments from "../components/StudentDocuments";
 import StudentHistory from "../components/StudentHistory";
 import StudentProfileDetails from "../components/StudentProfileDetails";
 import AiInsights from "../components/AiInsights";
+import { useData } from "@/context/DataContext";
+import { useParams } from "next/navigation";
 
-interface StudentProfilePageProps {
-  params: {
-    studentId: string;
-  };
-}
-
-// Mock function to get student data
-async function getStudent(id: string): Promise<Student | null> {
-    console.log(`Fetching student with id: ${id}`);
-    // In a real app, you would fetch this from your API
-    const mockStudent = {
-        id: '1',
-        first_name: 'John',
-        last_name: 'Doe',
-        middle_name: 'Quincy',
-        admission_number: 'STU-001',
-        date_of_birth: '2010-05-15',
-        gender: 'Male',
-        class_level: 'Grade 5',
-        stream: 'A',
-        enrollment_status: 'Active',
-    };
-    if (id === mockStudent.id) {
-        return mockStudent as Student;
-    }
-    return null;
-}
-
-
-export default async function StudentProfilePage({ params }: StudentProfilePageProps) {
+export default function StudentProfilePage() {
+  const params = useParams();
   const { studentId } = params;
+  const { students } = useData();
 
-  const student = await getStudent(studentId);
+  const student = students.find(s => s.id === studentId);
 
   if (!student) {
     return <div>Student not found or failed to load.</div>;
@@ -81,23 +55,23 @@ export default async function StudentProfilePage({ params }: StudentProfilePageP
         <TabsContent value="overview">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <StudentProfileDetails student={student} />
-                <AcademicSnapshot studentId={studentId} />
+                <AcademicSnapshot studentId={student.id} />
             </div>
         </TabsContent>
         <TabsContent value="ai-insights">
-            <AiInsights studentId={studentId} />
+            <AiInsights studentId={student.id} />
         </TabsContent>
         <TabsContent value="history">
-            <StudentHistory studentId={studentId} />
+            <StudentHistory studentId={student.id} />
         </TabsContent>
         <TabsContent value="documents">
-            <StudentDocuments studentId={studentId} />
+            <StudentDocuments studentId={student.id} />
         </TabsContent>
          <TabsContent value="health">
-            <MedicalFlags studentId={studentId} />
+            <MedicalFlags studentId={student.id} />
         </TabsContent>
          <TabsContent value="guardians">
-            <GuardianRelationships studentId={studentId} />
+            <GuardianRelationships studentId={student.id} />
         </TabsContent>
       </Tabs>
     </div>

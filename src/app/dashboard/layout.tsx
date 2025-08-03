@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import * as React from 'react';
@@ -61,6 +60,7 @@ import {
   SidebarMenuSubButton
 } from '@/components/ui/sidebar';
 import { UserRole } from '@/types';
+import { DataProvider } from '@/context/DataContext';
 
 
 const allMenuItems = [
@@ -132,114 +132,116 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
 
     return (
-        <SidebarProvider>
-            <Sidebar>
-                <SidebarHeader>
-                    <Logo />
-                </SidebarHeader>
-                <SidebarContent>
-                    <SidebarMenu>
-                         {menuItems.map((item) => (
-                            <SidebarMenuItem key={item.label}>
-                                {item.subItems ? (
-                                    <>
-                                        <SidebarMenuButton 
-                                            onClick={() => toggleMenu(item.label)} 
-                                            isActive={item.subItems.some(sub => isLinkActive(sub.href))}
-                                            tooltip={item.label}
-                                        >
-                                            <item.icon />
-                                            <span>{item.label}</span>
+        <DataProvider>
+            <SidebarProvider>
+                <Sidebar>
+                    <SidebarHeader>
+                        <Logo />
+                    </SidebarHeader>
+                    <SidebarContent>
+                        <SidebarMenu>
+                            {menuItems.map((item) => (
+                                <SidebarMenuItem key={item.label}>
+                                    {item.subItems ? (
+                                        <>
+                                            <SidebarMenuButton 
+                                                onClick={() => toggleMenu(item.label)} 
+                                                isActive={item.subItems.some(sub => isLinkActive(sub.href))}
+                                                tooltip={item.label}
+                                            >
+                                                <item.icon />
+                                                <span>{item.label}</span>
+                                            </SidebarMenuButton>
+                                            {openMenus[item.label] && (
+                                                <SidebarMenuSub>
+                                                    {item.subItems.map(subItem => (
+                                                        <SidebarMenuSubItem key={subItem.href}>
+                                                            <Link href={subItem.href} passHref asChild>
+                                                                <SidebarMenuSubButton asChild isActive={isLinkActive(subItem.href)}>
+                                                                    <>
+                                                                        <subItem.icon />
+                                                                        <span>{subItem.label}</span>
+                                                                    </>
+                                                                </SidebarMenuSubButton>
+                                                            </Link>
+                                                        </SidebarMenuSubItem>
+                                                    ))}
+                                                </SidebarMenuSub>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <SidebarMenuButton asChild isActive={isLinkActive(item.href!)} tooltip={item.label}>
+                                            <Link href={item.href!}>
+                                                <item.icon />
+                                                <span>{item.label}</span>
+                                            </Link>
                                         </SidebarMenuButton>
-                                        {openMenus[item.label] && (
-                                            <SidebarMenuSub>
-                                                {item.subItems.map(subItem => (
-                                                    <SidebarMenuSubItem key={subItem.href}>
-                                                        <Link href={subItem.href} passHref asChild>
-                                                            <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
-                                                                <>
-                                                                    <subItem.icon />
-                                                                    <span>{subItem.label}</span>
-                                                                </>
-                                                            </SidebarMenuSubButton>
-                                                        </Link>
-                                                    </SidebarMenuSubItem>
-                                                ))}
-                                            </SidebarMenuSub>
-                                        )}
-                                    </>
-                                ) : (
-                                    <SidebarMenuButton asChild isActive={isLinkActive(item.href!)} tooltip={item.label}>
-                                        <Link href={item.href!}>
-                                            <item.icon />
-                                            <span>{item.label}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                )}
+                                    )}
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarContent>
+                    <SidebarFooter>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild tooltip="Settings">
+                                    <Link href="/dashboard/settings">
+                                        <Settings />
+                                        <span>Settings</span>
+                                    </Link>
+                                </SidebarMenuButton>
                             </SidebarMenuItem>
-                        ))}
-                    </SidebarMenu>
-                </SidebarContent>
-                <SidebarFooter>
-                    <SidebarMenu>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild tooltip="Settings">
-                                <Link href="/dashboard/settings">
-                                    <Settings />
+                        </SidebarMenu>
+                    </SidebarFooter>
+                </Sidebar>
+                <SidebarInset>
+                    <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card/80 backdrop-blur-sm px-4 sm:px-6">
+                        <SidebarTrigger className="md:hidden" />
+                        <div className="relative flex-1">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                type="search"
+                                placeholder="Search modules..."
+                                className="w-full rounded-lg bg-muted pl-8 md:w-[200px] lg:w-[320px]"
+                            />
+                        </div>
+                        <Button variant="ghost" size="icon" className="rounded-full">
+                            <Bell className="h-5 w-5" />
+                            <span className="sr-only">Toggle notifications</span>
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="rounded-full">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src="https://placehold.co/100x100" alt="Admin" data-ai-hint="person user"/>
+                                        <AvatarFallback>AD</AvatarFallback>
+                                    </Avatar>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={() => router.push('#')}>
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push('/dashboard/settings')}>
+                                    <Settings className="mr-2 h-4 w-4" />
                                     <span>Settings</span>
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    </SidebarMenu>
-                </SidebarFooter>
-            </Sidebar>
-            <SidebarInset>
-                 <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-card/80 backdrop-blur-sm px-4 sm:px-6">
-                    <SidebarTrigger className="md:hidden" />
-                    <div className="relative flex-1">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search modules..."
-                            className="w-full rounded-lg bg-muted pl-8 md:w-[200px] lg:w-[320px]"
-                        />
-                    </div>
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                        <Bell className="h-5 w-5" />
-                        <span className="sr-only">Toggle notifications</span>
-                    </Button>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="rounded-full">
-                                <Avatar className="h-8 w-8">
-                                    <AvatarImage src="https://placehold.co/100x100" alt="Admin" data-ai-hint="person user"/>
-                                    <AvatarFallback>AD</AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuLabel>Admin Account</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={() => router.push('#')}>
-                                <User className="mr-2 h-4 w-4" />
-                                <span>Profile</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => router.push('/dashboard/settings')}>
-                                <Settings className="mr-2 h-4 w-4" />
-                                <span>Settings</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onSelect={handleLogout}>
-                                <LogOut className="mr-2 h-4 w-4" />
-                                <span>Logout</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </header>
-                <main className="flex-1 p-4 sm:p-6">
-                    {children}
-                </main>
-            </SidebarInset>
-        </SidebarProvider>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={handleLogout}>
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    <span>Logout</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </header>
+                    <main className="flex-1 p-4 sm:p-6">
+                        {children}
+                    </main>
+                </SidebarInset>
+            </SidebarProvider>
+        </DataProvider>
     );
 }

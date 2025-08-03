@@ -2,12 +2,12 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
-import { getExamResults, getExamStatistics } from '@/api';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { useData } from '@/context/DataContext';
 
 interface ResultsSummaryPageProps {
   params: {
@@ -19,19 +19,10 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function ResultsSummaryPage({ params }: ResultsSummaryPageProps) {
   const { examId } = params;
-  const [results, setResults] = useState<any[]>([]);
-  const [stats, setStats] = useState<any>(null);
+  const { examResults, examStats } = useData();
 
-  useEffect(() => {
-    async function fetchData() {
-      const resultsResponse = await getExamResults(/* filter by examId */);
-      setResults(resultsResponse.data.results || []);
-
-      const statsResponse = await getExamStatistics(examId);
-      setStats(statsResponse.data);
-    }
-    fetchData();
-  }, [examId]);
+  const results = examResults.filter(r => r.examId === examId);
+  const stats = examStats.find(s => s.examId === examId);
 
   const subjectAverages = stats?.subject_averages || [];
   const gradeDistribution = stats?.grade_distribution || [];

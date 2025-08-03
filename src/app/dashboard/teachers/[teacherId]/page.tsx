@@ -1,51 +1,22 @@
 
-import { getTeacherProfile } from '@/api';
+"use client";
+
 import TeacherProfileDetails from '@/app/dashboard/teachers/components/TeacherProfileDetails';
 import TeacherAssignments from '@/app/dashboard/teachers/components/TeacherAssignments';
-import TeacherSchedule from '@/app/dashboard/teachers/components/TeacherSchedule';
 import TeacherPerformance from '@/app/dashboard/teachers/components/TeacherPerformance';
-import TeacherDocuments from '@/app/dashboard/teachers/components/TeacherDocuments';
-import TeacherLeave from '@/app/dashboard/teachers/components/TeacherLeave';
-import { Teacher } from '@/app/dashboard/teachers/data/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useData } from '@/context/DataContext';
+import { useParams } from 'next/navigation';
 import { User, ClipboardCheck, Briefcase, Phone } from 'lucide-react';
 
-
-interface TeacherProfilePageProps {
-  params: {
-    teacherId: string;
-  };
-}
-
-// Mock function
-async function getTeacher(id: string): Promise<Teacher | null> {
-    const mockTeacher = { 
-        id: '1', 
-        staff_id: 'TCH-001', 
-        first_name: 'John', 
-        last_name: 'Doe', 
-        email: 'john.doe@example.com', 
-        phone_number: '123-456-7890', 
-        job_title: 'Lead Math Teacher', 
-        is_active: true, 
-        gender: 'Male' as 'Male', 
-        employment_type: 'Full-time' as 'Full-time',
-        subjects_taught: ['Mathematics', 'Physics'],
-        bio: 'An experienced mathematics teacher with a passion for helping students excel.'
-    };
-    if (id === mockTeacher.id) {
-        return mockTeacher;
-    }
-    return null;
-}
-
-
-export default async function TeacherProfilePage({ params }: TeacherProfilePageProps) {
+export default function TeacherProfilePage() {
+  const params = useParams();
   const { teacherId } = params;
+  const { teachers } = useData();
   
-  const teacher = await getTeacher(teacherId);
+  const teacher = teachers.find(t => t.id === teacherId);
 
   if (!teacher) {
     return <div>Teacher not found or failed to load.</div>;
@@ -79,10 +50,10 @@ export default async function TeacherProfilePage({ params }: TeacherProfilePageP
             <TeacherProfileDetails teacher={teacher} />
         </TabsContent>
         <TabsContent value="assignments">
-            <TeacherAssignments teacherId={teacherId} />
+            <TeacherAssignments teacherId={teacher.id} />
         </TabsContent>
         <TabsContent value="performance">
-            <TeacherPerformance teacherId={teacherId} />
+            <TeacherPerformance teacherId={teacher.id} />
         </TabsContent>
          <TabsContent value="contact">
             <p>Contact details and emergency contacts will be shown here.</p>

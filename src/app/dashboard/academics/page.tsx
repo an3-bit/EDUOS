@@ -1,10 +1,11 @@
 
+"use client";
+
 import { z } from 'zod';
 import { PlusCircle } from 'lucide-react';
 
 import { columns } from '@/app/dashboard/academics/components/columns';
 import { DataTable } from '@/app/dashboard/academics/components/data-table';
-import { classSchema } from '@/app/dashboard/academics/data/schema';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -16,34 +17,12 @@ import {
 } from '@/components/ui/dialog';
 import { ClassForm } from './components/class-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getClasses, getClassLevels, getStreams } from '@/api';
 import ClassLevelManagement from '@/app/dashboard/academics/components/ClassLevelManagement';
 import StreamManagement from '@/app/dashboard/academics/components/StreamManagement';
+import { useData } from '@/context/DataContext';
 
-async function getClassesData() {
-  const response = await getClasses();
-  if (response && response.data && Array.isArray(response.data.results)) {
-      return z.array(classSchema).parse(response.data.results);
-  }
-  return [];
-}
-
-async function getAcademicsData() {
-    const classLevelsResponse = await getClassLevels();
-    const streamsResponse = await getStreams();
-
-    const classLevels = (classLevelsResponse && classLevelsResponse.data && Array.isArray(classLevelsResponse.data.results)) ? classLevelsResponse.data.results : [];
-    const streams = (streamsResponse && streamsResponse.data && Array.isArray(streamsResponse.data.results)) ? streamsResponse.data.results : [];
-
-    return {
-        classLevels,
-        streams,
-    }
-}
-
-export default async function AcademicsManagementPage() {
-  const classes = await getClassesData();
-  const { classLevels, streams } = await getAcademicsData();
+export default function AcademicsManagementPage() {
+  const { classes, classLevels, streams } = useData();
 
   return (
     <>
