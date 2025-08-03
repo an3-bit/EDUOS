@@ -25,6 +25,8 @@ import {
   User,
   Users,
   Wallet,
+  BarChart3,
+  UserPlus
 } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -49,13 +51,27 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarInset,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton
 } from '@/components/ui/sidebar';
 import { UserRole } from '@/types';
 
 
 const allMenuItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.LIBRARIAN, UserRole.FINANCE, UserRole.HOSTEL_MANAGER] },
-    { href: "/dashboard/students", label: "Student Management", icon: Users, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
+    { 
+        label: "Student Management", 
+        icon: Users, 
+        roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER],
+        subItems: [
+            { href: "/dashboard/students", label: "Analytics", icon: BarChart3 },
+            { href: "/dashboard/students/list", label: "All Students", icon: Users },
+            { href: "/dashboard/students/create", label: "New Admission", icon: UserPlus },
+        ] 
+    },
     { href: "/dashboard/teachers", label: "Teacher Management", icon: GraduationCap, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN] },
     { href: "/dashboard/finance", label: "Finance Management", icon: Wallet, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
     { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
@@ -85,6 +101,7 @@ const Logo = () => (
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const router = useRouter();
     const pathname = usePathname();
+    const [openMenus, setOpenMenus] = React.useState<Record<string, boolean>>({});
 
     const handleLogout = () => {
         router.push('/');
@@ -92,6 +109,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     
     const isLinkActive = (href: string) => {
         return href === '/dashboard' ? pathname === href : pathname.startsWith(href);
+    };
+
+    const toggleMenu = (label: string) => {
+        setOpenMenus(prev => ({ ...prev, [label]: !prev[label] }));
     };
 
     const menuItems = allMenuItems;
@@ -105,14 +126,41 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarMenu>
-                        {menuItems.map((item) => (
+                         {menuItems.map((item) => (
                             <SidebarMenuItem key={item.label}>
-                                <SidebarMenuButton asChild isActive={isLinkActive(item.href)} tooltip={item.label}>
-                                    <Link href={item.href}>
-                                        <item.icon />
-                                        <span>{item.label}</span>
-                                    </Link>
-                                </SidebarMenuButton>
+                                {item.subItems ? (
+                                    <>
+                                        <SidebarMenuButton 
+                                            onClick={() => toggleMenu(item.label)} 
+                                            isActive={item.subItems.some(sub => isLinkActive(sub.href))}
+                                            tooltip={item.label}
+                                        >
+                                            <item.icon />
+                                            <span>{item.label}</span>
+                                        </SidebarMenuButton>
+                                        {openMenus[item.label] && (
+                                            <SidebarMenuSub>
+                                                {item.subItems.map(subItem => (
+                                                    <SidebarMenuSubItem key={subItem.href}>
+                                                        <Link href={subItem.href}>
+                                                            <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
+                                                                <subItem.icon />
+                                                                <span>{subItem.label}</span>
+                                                            </SidebarMenuSubButton>
+                                                        </Link>
+                                                    </SidebarMenuSubItem>
+                                                ))}
+                                            </SidebarMenuSub>
+                                        )}
+                                    </>
+                                ) : (
+                                    <SidebarMenuButton asChild isActive={isLinkActive(item.href!)} tooltip={item.label}>
+                                        <Link href={item.href!}>
+                                            <item.icon />
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                )}
                             </SidebarMenuItem>
                         ))}
                     </SidebarMenu>

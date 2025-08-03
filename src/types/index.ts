@@ -1,4 +1,5 @@
 
+
 export enum UserRole {
     SUPER_ADMIN = "SUPER_ADMIN",
     ADMIN = "ADMIN",
@@ -27,10 +28,13 @@ export interface User {
 export interface Student {
   id: string;
   first_name: string;
-  middle_name?: string;
   last_name: string;
+  middle_name?: string;
   admission_number: string;
   date_of_birth: string;
-  gender: string;
-  enrollment_status?: string;
+  gender: 'Male' | 'Female' | 'Other';
+  class_level: string;
+  stream?: string;
+  enrollment_status: 'Active' | 'Suspended' | 'Graduated' | 'Transferred' | 'Inactive' | 'Expelled';
+  photo?: string;
 }

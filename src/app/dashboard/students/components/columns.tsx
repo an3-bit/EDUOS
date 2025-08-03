@@ -1,7 +1,9 @@
+
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -15,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Student } from "@/app/dashboard/students/data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
+import { Badge } from "@/components/ui/badge"
 
 
 export const columns: ColumnDef<Student>[] = [
@@ -41,34 +44,44 @@ export const columns: ColumnDef<Student>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "admission_number",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Student ID" />
+        <DataTableColumnHeader column={column} title="Admission #" />
     ),
   },
   {
-    accessorKey: "name",
+    accessorFn: row => `${row.first_name} ${row.last_name}`,
+    id: 'name',
      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Name" />
     ),
   },
     {
-    accessorKey: "class",
+    accessorKey: "class_level",
     header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Class" />
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "gender",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Email" />
+        <DataTableColumnHeader column={column} title="Gender" />
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "enrollment_status",
      header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Status" />
     ),
+     cell: ({ row }) => {
+      const status = row.getValue("enrollment_status") as string
+       const variant: "default" | "secondary" | "outline" | "destructive" =
+        status === "Active" ? "default" : status === "Graduated" ? "secondary" : "outline";
+      return <Badge variant={variant}>{status}</Badge>
+    },
+      filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
   },
   {
     id: "actions",
@@ -85,15 +98,16 @@ export const columns: ColumnDef<Student>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(student.id)}
-            >
-              Copy student ID
+            <DropdownMenuItem>
+                <Link href={`/dashboard/students/${student.id}`}>View student details</Link>
+            </DropdownMenuItem>
+             <DropdownMenuItem>
+                <Link href={`/dashboard/students/edit/${student.id}`}>Edit student</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View student details</DropdownMenuItem>
-            <DropdownMenuItem>Edit student</DropdownMenuItem>
-             <DropdownMenuItem className="text-red-600">Delete student</DropdownMenuItem>
+            <DropdownMenuItem>Promote Student</DropdownMenuItem>
+            <DropdownMenuItem>Assign to Stream</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600">Suspend Student</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )

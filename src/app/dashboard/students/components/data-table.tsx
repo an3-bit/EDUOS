@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -22,17 +23,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableViewOptions } from "./data-table-view-options"
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -73,7 +67,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-        <div className="flex items-center py-4">
+        <div className="flex items-center gap-4 py-4">
             <Input
             placeholder="Filter by name..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -82,6 +76,22 @@ export function DataTable<TData, TValue>({
             }
             className="max-w-sm"
             />
+             <Select
+                value={(table.getColumn("enrollment_status")?.getFilterValue() as string) ?? ""}
+                onValueChange={(value) =>
+                    table.getColumn("enrollment_status")?.setFilterValue(value)
+                }
+                >
+                <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by Status" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="Active">Active</SelectItem>
+                    <SelectItem value="Inactive">Inactive</SelectItem>
+                    <SelectItem value="Suspended">Suspended</SelectItem>
+                    <SelectItem value="Graduated">Graduated</SelectItem>
+                </SelectContent>
+            </Select>
              <DataTableViewOptions table={table} />
       </div>
       <div className="rounded-md border">
