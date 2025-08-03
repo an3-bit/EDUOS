@@ -86,7 +86,19 @@ export const getEvents = () => Promise.resolve({ data: { results: [] } });
 export const getMedicalRecords = () => Promise.resolve({ data: { results: [] } });
 export const getHostelRooms = () => Promise.resolve({ data: { results: [] } });
 export const getTransportVehicles = () => Promise.resolve({ data: { results: [] } });
-export const getLibraryBooks = () => Promise.resolve({ data: { results: [] } });
+
+
+// Library API Mocks
+export const getLibraryBooks = () => Promise.resolve({ data: { results: [
+    { id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', isbn: '9780743273565', status: 'Available' },
+    { id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', isbn: '9780061120084', status: 'Borrowed' },
+    { id: '3', title: '1984', author: 'George Orwell', isbn: '9780451524935', status: 'Available' },
+]}});
+export const getBookCopies = () => Promise.resolve({ data: { results: [] } });
+export const getBorrowTransactions = () => Promise.resolve({ data: { results: [] } });
+export const getLibraryFines = () => Promise.resolve({ data: { results: [] } });
+
+
 export const getTimetable = () => Promise.resolve({ data: { results: [] } });
 
 export const getExams = () => Promise.resolve({ data: { results: [

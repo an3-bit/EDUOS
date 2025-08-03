@@ -17,11 +17,12 @@ import {
 import { BookForm } from './components/book-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getLibraryBooks } from '@/api';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 async function getBooks() {
   const response = await getLibraryBooks();
   if (response && response.data && Array.isArray(response.data.results)) {
-    return z.array(bookSchema).parse(response.data.results);
+    return z.array(bookSchema.partial()).parse(response.data.results);
   }
   return [];
 }
@@ -45,7 +46,7 @@ export default async function LibraryManagementPage() {
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Book
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[480px]">
               <DialogHeader>
                 <DialogTitle>Add New Book</DialogTitle>
                 <DialogDescription>
@@ -59,19 +60,59 @@ export default async function LibraryManagementPage() {
       </div>
       <div className="mt-6">
         <Tabs defaultValue="books">
-            <TabsList>
+            <TabsList className="grid w-full grid-cols-5">
+                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
                 <TabsTrigger value="books">Books</TabsTrigger>
-                <TabsTrigger value="borrowing">Borrowing Records</TabsTrigger>
+                <TabsTrigger value="borrowing">Borrowing</TabsTrigger>
                 <TabsTrigger value="fines">Fines</TabsTrigger>
+                <TabsTrigger value="members">Members</TabsTrigger>
             </TabsList>
+            <TabsContent value="dashboard">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Library Dashboard</CardTitle>
+                        <CardDescription>Overview of library activities.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">Charts and KPIs will be displayed here.</p>
+                    </CardContent>
+                </Card>
+            </TabsContent>
             <TabsContent value="books">
                  <DataTable data={books} columns={columns} />
             </TabsContent>
             <TabsContent value="borrowing">
-                <p className="text-muted-foreground p-4">Borrowing records will be displayed here.</p>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Borrowing Records</CardTitle>
+                        <CardDescription>All current and past borrowing transactions.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">Borrowing records will be displayed here.</p>
+                    </CardContent>
+                </Card>
             </TabsContent>
             <TabsContent value="fines">
-                 <p className="text-muted-foreground p-4">Fines will be displayed here.</p>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Fines Management</CardTitle>
+                        <CardDescription>All outstanding and paid fines.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">Fines will be displayed here.</p>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="members">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Library Members</CardTitle>
+                        <CardDescription>Manage student and teacher library memberships.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-muted-foreground p-4">A list of library members will be displayed here.</p>
+                    </CardContent>
+                </Card>
             </TabsContent>
         </Tabs>
       </div>
