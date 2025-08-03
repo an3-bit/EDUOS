@@ -4,7 +4,7 @@ import { PlusCircle, MessageSquare } from 'lucide-react';
 
 import { columns } from '@/app/dashboard/parents/components/columns';
 import { DataTable } from '@/app/dashboard/parents/components/data-table';
-import { guardianSchema } from '@/app/dashboard/parents/data/schema';
+import { guardianSchema, guardianNotificationSchema } from '@/app/dashboard/parents/data/schema';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -18,7 +18,7 @@ import { GuardianForm } from './components/guardian-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getGuardians, getStudentGuardians, getGuardianNotifications } from '@/api';
+import { getGuardians, getGuardianNotifications } from '@/api';
 
 async function getGuardiansData() {
   const response = await getGuardians();
@@ -30,14 +30,17 @@ async function getGuardiansData() {
       studentName: guardian.linked_students?.map((s:any) => s.name).join(', ') || 'N/A',
       status: guardian.is_active ? 'Active' : 'Inactive',
     }));
-    return z.array(guardianSchema).parse(augmentedResults);
+    return z.array(guardianSchema.partial()).parse(augmentedResults);
   }
   return [];
 }
 
 async function getCommunicationData() {
     const response = await getGuardianNotifications();
-    return response.data.results || [];
+    if(response.data.results) {
+        return z.array(guardianNotificationSchema.partial()).parse(response.data.results);
+    }
+    return [];
 }
 
 async function getLinkedStudentsData() {
@@ -81,7 +84,7 @@ export default async function GuardianPortalPage() {
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Guardian
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[550px]">
               <DialogHeader>
                 <DialogTitle>Add New Guardian</DialogTitle>
                 <DialogDescription>

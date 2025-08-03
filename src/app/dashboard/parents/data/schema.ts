@@ -35,6 +35,8 @@ export const guardianStudentLinkSchema = z.object({
   is_primary: z.boolean(),
   verified_by_school: z.boolean(),
   notes: z.string().optional(),
+  start_date: z.date().optional(),
+  end_date: z.date().optional(),
 });
 
 export type GuardianStudentLink = z.infer<typeof guardianStudentLinkSchema>;
@@ -43,10 +45,17 @@ export type GuardianStudentLink = z.infer<typeof guardianStudentLinkSchema>;
 export const guardianNotificationSchema = z.object({
     id: z.string(),
     guardian: z.string(),
+    institution: z.string(),
     title: z.string(),
     message: z.string(),
     type: z.enum(['exam_update', 'chat', 'fee_balance', 'general']),
+    content_type: z.string().optional(),
+    object_id: z.string().optional(),
+    priority: z.enum(['low', 'normal', 'high', 'urgent']),
+    delivered_via: z.enum(['system', 'sms', 'email', 'push']),
+    scheduled_for: z.date().optional(),
     is_read: z.boolean(),
+    read_at: z.date().optional(),
     timestamp: z.string(),
 });
 

@@ -22,8 +22,8 @@ import { Textarea } from "@/components/ui/textarea"
 
 
 const guardianFormSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required." }),
-  lastName: z.string().min(1, { message: "Last name is required." }),
+  first_name: z.string().min(1, { message: "First name is required." }),
+  last_name: z.string().min(1, { message: "Last name is required." }),
   email: z.string().email({ message: "A valid email is required." }),
   phone_number: z.string().min(1, { message: "Phone number is required." }),
   occupation: z.string().optional(),
@@ -60,7 +60,7 @@ export function GuardianForm() {
         <div className="grid grid-cols-2 gap-4">
             <FormField
             control={form.control}
-            name="firstName"
+            name="first_name"
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>First Name</FormLabel>
@@ -73,7 +73,7 @@ export function GuardianForm() {
             />
             <FormField
             control={form.control}
-            name="lastName"
+            name="last_name"
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Last Name</FormLabel>
