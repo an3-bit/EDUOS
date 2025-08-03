@@ -9,123 +9,120 @@ const api = axios.create({
 
 const handleError = (error: any) => {
     console.error('API call failed:', error);
+    // Return a structure that won't break the frontend
     return { data: { results: [] } };
 };
 
-
-// Auth APIs
-export const loginUser = async (data: any) => Promise.resolve({ data: { access: 'mock-token' } });
-export const registerUser = async (data: any) => Promise.resolve({ data: {} });
-
-// Student Management APIs
-export const getStudents = () => api.get('/students/').catch(handleError);
-export const getStudentProfile = (studentId: string) => api.get(`/students/${studentId}/`).catch(handleError);
+// Mock API calls
+export const getStudents = () => Promise.resolve({ data: { results: [
+    { id: '1', admission_number: 'STU-001', first_name: 'John', last_name: 'Doe', gender: 'Male', class_level: 'Grade 5', enrollment_status: 'Active', date_of_birth: new Date('2010-05-15') },
+    { id: '2', admission_number: 'STU-002', first_name: 'Jane', last_name: 'Smith', gender: 'Female', class_level: 'Grade 4', enrollment_status: 'Active', date_of_birth: new Date('2011-08-20') },
+    { id: '3', admission_number: 'STU-003', first_name: 'Peter', last_name: 'Jones', gender: 'Male', class_level: 'Grade 5', enrollment_status: 'Suspended', date_of_birth: new Date('2010-07-22') },
+] } });
+export const getStudentProfile = (studentId: string) => Promise.resolve({ data: { id: studentId, first_name: 'John', last_name: 'Doe' } });
 export const updateStudentProfile = (studentId: string, data: any) => Promise.resolve({ data: {} });
-export const getStudentDocuments = (studentId: string) => api.get(`/students/${studentId}/documents/`).catch(handleError);
+export const getStudentDocuments = (studentId: string) => Promise.resolve({ data: { results: [] } });
 export const uploadStudentDocument = (studentId: string, data: FormData) => Promise.resolve({ data: {} });
-export const getStudentHistory = (studentId: string) => api.get(`/students/${studentId}/history/`).catch(handleError);
-export const getStudentAcademicSnapshots = (studentId: string) => api.get(`/students/${studentId}/academic-snapshots/`).catch(handleError);
-export const getStudentGuardians = (studentId: string) => api.get(`/students/${studentId}/guardians/`).catch(handleError);
+export const getStudentHistory = (studentId: string) => Promise.resolve({ data: { results: [] } });
+export const getStudentAcademicSnapshots = (studentId: string) => Promise.resolve({ data: { results: [] } });
+export const getStudentGuardians = (studentId: string) => Promise.resolve({ data: { results: [] } });
 
-// Teacher Management APIs
-export const getTeachers = () => api.get('/teachers/').catch(handleError);
-export const getTeacherProfile = (teacherId: string) => api.get(`/teachers/${teacherId}/`).catch(handleError);
+export const getTeachers = () => Promise.resolve({ data: { results: [] } });
+export const getTeacherProfile = (teacherId: string) => Promise.resolve({ data: { id: teacherId, name: 'Mr. Smith' } });
 export const updateTeacherProfile = (teacherId: string, data: any) => Promise.resolve({ data: {} });
-export const getTeacherAssignments = (teacherId: string) => api.get(`/teachers/${teacherId}/assignments/`).catch(handleError);
-export const getTeacherSchedule = (teacherId: string) => api.get(`/teachers/${teacherId}/schedule/`).catch(handleError);
-export const getTeacherPerformance = (teacherId: string) => api.get(`/teachers/${teacherId}/performance/`).catch(handleError);
-export const getTeacherLeave = (teacherId: string) => api.get(`/teachers/${teacherId}/leave/`).catch(handleError);
+export const getTeacherAssignments = (teacherId: string) => Promise.resolve({ data: { results: [] } });
+export const getTeacherSchedule = (teacherId: string) => Promise.resolve({ data: { results: [] } });
+export const getTeacherPerformance = (teacherId: string) => Promise.resolve({ data: { results: [] } });
+export const getTeacherLeave = (teacherId: string) => Promise.resolve({ data: { results: [] } });
 export const submitLeaveRequest = (teacherId: string, data: any) => Promise.resolve({ data: {} });
 
-// Finance Management APIs
-export const getBudgets = () => api.get('/finance/budgets/').catch(handleError);
+export const getBudgets = () => Promise.resolve({ data: { results: [] } });
 export const createBudget = (data: any) => Promise.resolve({ data: {} });
-export const getIncomeRecords = () => api.get('/finance/income/').catch(handleError);
+export const getIncomeRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordIncome = (data: any) => Promise.resolve({ data: {} });
-export const getExpenseRecords = () => api.get('/finance/expenses/').catch(handleError);
+export const getExpenseRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordExpense = (data: any) => Promise.resolve({ data: {} });
-export const getInvoices = () => api.get('/finance/invoices/').catch(handleError);
+export const getInvoices = () => Promise.resolve({ data: { results: [] } });
 export const generateInvoice = (data: any) => Promise.resolve({ data: {} });
-export const getPaymentRecords = () => api.get('/finance/payments/').catch(handleError);
+export const getPaymentRecords = () => Promise.resolve({ data: { results: [] } });
 export const processPayment = (data: any) => Promise.resolve({ data: {} });
-export const getStudentWallet = (studentId: string) => api.get(`/finance/wallet/${studentId}/`).catch(handleError);
+export const getStudentWallet = (studentId: string) => Promise.resolve({ data: {} });
 export const performWalletTransaction = (studentId: string, data: any) => Promise.resolve({ data: {} });
-export const getFinancialReports = () => api.get('/finance/reports/').catch(handleError);
+export const getFinancialReports = () => Promise.resolve({ data: { results: [] } });
 
-// Attendance Management APIs
-export const getSchoolAttendanceRecords = () => api.get('/attendance/school/').catch(handleError);
+export const getSchoolAttendanceRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordSchoolAttendance = (data: any) => Promise.resolve({ data: {} });
-export const getClassAttendanceRecords = () => api.get('/attendance/class/').catch(handleError);
+export const getClassAttendanceRecords = () => Promise.resolve({ data: { results: [] } });
 export const recordClassAttendance = (data: any) => Promise.resolve({ data: {} });
-export const getStudentAttendance = (studentId: string) => api.get(`/attendance/student/${studentId}/`).catch(handleError);
-export const getTeacherAttendance = (teacherId: string) => api.get(`/attendance/teacher/${teacherId}/`).catch(handleError);
-export const getAttendanceReports = () => api.get('/attendance/reports/').catch(handleError);
-export const getAttendanceSettings = () => api.get('/attendance/settings/').catch(handleError);
+export const getStudentAttendance = (studentId: string) => Promise.resolve({ data: { results: [] } });
+export const getTeacherAttendance = (teacherId: string) => Promise.resolve({ data: { results: [] } });
+export const getAttendanceReports = () => Promise.resolve({ data: { results: [] } });
+export const getAttendanceSettings = () => Promise.resolve({ data: { results: [] } });
 export const updateAttendanceSettings = (data: any) => Promise.resolve({ data: {} });
 
-// Classes & Academics Management APIs
-export const getClasses = () => api.get('/academics/classes/').catch(handleError);
-export const getClassLevels = () => api.get('/academics/levels/').catch(handleError);
+export const getClasses = () => Promise.resolve({ data: { results: [] } });
+export const getClassLevels = () => Promise.resolve({ data: { results: [] } });
 export const createClassLevel = (data: any) => Promise.resolve({ data: {} });
-export const getStreams = () => api.get('/academics/streams/').catch(handleError);
+export const getStreams = () => Promise.resolve({ data: { results: [] } });
 export const createStream = (data: any) => Promise.resolve({ data: {} });
-export const getStreamStudents = (streamId: string) => api.get(`/academics/streams/${streamId}/students/`).catch(handleError);
+export const getStreamStudents = (streamId: string) => Promise.resolve({ data: { results: [] } });
 export const addStudentToStream = (streamId: string, data: any) => Promise.resolve({ data: {} });
-export const getStreamAnalytics = (streamId: string) => api.get(`/academics/streams/${streamId}/analytics/`).catch(handleError);
+export const getStreamAnalytics = (streamId: string) => Promise.resolve({ data: {} });
 export const processPromotions = (data: any) => Promise.resolve({ data: {} });
 
-// E-Learning Management APIs
-export const getCourses = () => api.get('/elearning/courses/').catch(handleError);
-export const getCourseDetails = (id: string) => api.get(`/elearning/courses/${id}/`).catch(handleError);
-export const getCourseLessons = (id: string) => api.get(`/elearning/courses/${id}/lessons/`).catch(handleError);
-export const getLessonContent = (id: string) => api.get(`/elearning/lessons/${id}/`).catch(handleError);
-export const getAssignments = () => api.get('/elearning/assignments/').catch(handleError);
+export const getCourses = () => Promise.resolve({ data: { results: [] } });
+export const getCourseDetails = (id: string) => Promise.resolve({ data: {} });
+export const getCourseLessons = (id: string) => Promise.resolve({ data: { results: [] } });
+export const getLessonContent = (id: string) => Promise.resolve({ data: {} });
+export const getAssignments = () => Promise.resolve({ data: { results: [] } });
 export const createAssignment = (data: any) => Promise.resolve({ data: {} });
-export const getAssignmentSubmissions = (id: string) => api.get(`/elearning/assignments/${id}/submissions/`).catch(handleError);
+export const getAssignmentSubmissions = (id: string) => Promise.resolve({ data: { results: [] } });
 export const submitAssignment = (id: string, data: any) => Promise.resolve({ data: {} });
-export const getLearningProgress = (studentId: string) => api.get(`/elearning/progress/${studentId}/`).catch(handleError);
-export const getLiveClassSessions = () => api.get('/elearning/live-classes/').catch(handleError);
+export const getLearningProgress = (studentId: string) => Promise.resolve({ data: {} });
+export const getLiveClassSessions = () => Promise.resolve({ data: { results: [] } });
 export const createLiveClass = (data: any) => Promise.resolve({ data: {} });
 
-// Events API
-export const getEvents = () => api.get('/events/').catch(handleError);
+export const getEvents = () => Promise.resolve({ data: { results: [] } });
+export const getMedicalRecords = () => Promise.resolve({ data: { results: [] } });
+export const getHostelRooms = () => Promise.resolve({ data: { results: [] } });
+export const getTransportVehicles = () => Promise.resolve({ data: { results: [] } });
+export const getLibraryBooks = () => Promise.resolve({ data: { results: [] } });
+export const getTimetable = () => Promise.resolve({ data: { results: [] } });
 
-// Medical API
-export const getMedicalRecords = () => api.get('/medical/').catch(handleError);
-
-// Hostel API
-export const getHostelRooms = () => api.get('/hostel/rooms/').catch(handleError);
-
-// Transport API
-export const getTransportVehicles = () => api.get('/transport/vehicles/').catch(handleError);
-
-// Library API
-export const getLibraryBooks = () => api.get('/library/books/').catch(handleError);
-
-// Timetable API
-export const getTimetable = () => api.get('/timetable/').catch(handleError);
-
-// Guardian API
-export const getGuardians = () => api.get('/guardians/').catch(handleError);
-
-// Exams & Assessments APIs
-export const getExams = () => api.get('/exams/').catch(handleError);
+export const getExams = () => Promise.resolve({ data: { results: [
+    { id: '1', name: 'Mid-Term Exams', classLevel: 'Grade 5', term: 'Term 2', year: 2024, status: 'Graded' },
+    { id: '2', name: 'Final Exams', classLevel: 'Grade 5', term: 'Term 3', year: 2024, status: 'Published' },
+]}});
 export const createExam = (data: any) => Promise.resolve({ data: {} });
-export const getExamDetails = (id: string) => api.get(`/exams/${id}/`).catch(handleError);
+export const getExamDetails = (id: string) => Promise.resolve({ data: {} });
 export const updateExam = (id: string, data: any) => Promise.resolve({ data: {} });
 export const deleteExam = (id: string) => Promise.resolve({ data: {} });
 export const gradeExam = (id: string) => Promise.resolve({ data: {} });
-export const getExamInsights = (id: string) => api.get(`/exams/${id}/insights/`).catch(handleError);
-export const getExamSubjects = () => api.get('/exam-subjects/').catch(handleError);
+export const getExamInsights = (id: string) => Promise.resolve({ data: {} });
+export const getExamSubjects = () => Promise.resolve({ data: { results: [] } });
 export const assignSubjectToExam = (data: any) => Promise.resolve({ data: {} });
-export const getStudentScores = () => api.get('/student-scores/').catch(handleError);
+export const getStudentScores = () => Promise.resolve({ data: { results: [] } });
 export const submitStudentScore = (data: any) => Promise.resolve({ data: {} });
-export const getExamResults = () => api.get('/exam-results/').catch(handleError);
-export const getStudentReport = (studentId: string) => api.get(`/exam-results/student_report/?student_id=${studentId}`).catch(handleError);
-export const getExamStatistics = (examId: string) => api.get(`/analytics/statistics/${examId}/`).catch(handleError);
+export const getExamResults = () => Promise.resolve({ data: { results: [] } });
+export const getStudentReport = (studentId: string) => Promise.resolve({ data: {} });
+export const getExamStatistics = (examId: string) => Promise.resolve({ data: {} });
 export const generateRankings = (examId: string) => Promise.resolve({ data: {} });
 export const assignGrades = (examId: string) => Promise.resolve({ data: {} });
-export const getStudentPerformance = (examId: string, studentId: string) => api.get(`/analytics/summary/${examId}/${studentId}/`).catch(handleError);
-export const getAIPredictions = () => api.get('/predictions/').catch(handleError);
+export const getStudentPerformance = (examId: string, studentId: string) => Promise.resolve({ data: {} });
+export const getAIPredictions = () => Promise.resolve({ data: { results: [] } });
 export const generateAIQuestions = (data: any) => Promise.resolve({ data: {} });
 export const uploadExamForOCR = (data: FormData, type: 'image' | 'pdf') => Promise.resolve({ data: {} });
+
+// Guardian API mocks
+export const getGuardians = () => Promise.resolve({ data: { results: [
+    { id: '1', user: 'user1', institution: 'inst1', phone_number: '123-456-7890', email: 'jane.doe@example.com', is_active: true, user_details: { first_name: 'Jane', last_name: 'Doe' }, linked_students: [{name: 'John Doe', relationship: 'Mother'}] },
+    { id: '2', user: 'user2', institution: 'inst1', phone_number: '098-765-4321', email: 'john.smith@example.com', is_active: false, user_details: { first_name: 'John', last_name: 'Smith' }, linked_students: [{name: 'Emily Smith', relationship: 'Father'}] },
+] } });
+export const getGuardianNotifications = () => Promise.resolve({ data: { results: [
+    {id: '1', guardian: '1', guardian_name: 'Jane Doe', title: 'Fee Reminder', message: 'Please note that the school fees for Term 2 are due next week.', type: 'fee_balance', is_read: false, timestamp: new Date().toISOString()},
+    {id: '2', guardian: '2', guardian_name: 'John Smith', title: 'Exam Results Published', message: 'The results for the mid-term exams are now available on the portal.', type: 'exam_update', is_read: true, timestamp: new Date(Date.now() - 86400000).toISOString()},
+] } });
+
+// Auth is mocked directly in AuthContext for now
+export const loginUser = (data: any) => Promise.resolve({ data: { access: 'mock-token' } });
+export const registerUser = (data: any) => Promise.resolve({ data: {} });

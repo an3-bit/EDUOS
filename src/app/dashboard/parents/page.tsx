@@ -16,20 +16,51 @@ import {
 } from '@/components/ui/dialog';
 import { GuardianForm } from './components/guardian-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getGuardians } from '@/api';
+import { getGuardians, getStudentGuardians, getGuardianNotifications } from '@/api';
 
 async function getGuardiansData() {
   const response = await getGuardians();
   if (response && response.data && Array.isArray(response.data.results)) {
-    return z.array(guardianSchema).parse(response.data.results);
+    // Manually add fields for table display if they don't come from the API
+    const augmentedResults = response.data.results.map((guardian: any) => ({
+      ...guardian,
+      name: `${guardian.user_details?.first_name || 'N/A'} ${guardian.user_details?.last_name || 'N/A'}`,
+      studentName: guardian.linked_students?.map((s:any) => s.name).join(', ') || 'N/A',
+      status: guardian.is_active ? 'Active' : 'Inactive',
+    }));
+    return z.array(guardianSchema).parse(augmentedResults);
   }
   return [];
 }
 
+async function getCommunicationData() {
+    const response = await getGuardianNotifications();
+    return response.data.results || [];
+}
+
+async function getLinkedStudentsData() {
+    // This is a mock, in a real scenario you would fetch all links
+    const guardiansResponse = await getGuardians();
+    if (guardiansResponse.data.results) {
+        const links = guardiansResponse.data.results.flatMap((g: any) => 
+            g.linked_students.map((s: any) => ({
+                guardianName: `${g.user_details.first_name} ${g.user_details.last_name}`,
+                studentName: s.name,
+                relationship: s.relationship,
+            }))
+        );
+        return links;
+    }
+    return [];
+}
+
+
 export default async function GuardianPortalPage() {
   const guardians = await getGuardiansData();
+  const communications = await getCommunicationData();
+  const linkedStudents = await getLinkedStudentsData();
 
   return (
     <>
@@ -64,7 +95,7 @@ export default async function GuardianPortalPage() {
       </div>
        <div className="mt-6">
         <Tabs defaultValue="guardians">
-            <TabsList>
+            <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="guardians">Guardians</TabsTrigger>
                 <TabsTrigger value="communication">Communication</TabsTrigger>
                  <TabsTrigger value="linked-students">Linked Students</TabsTrigger>
@@ -76,24 +107,49 @@ export default async function GuardianPortalPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Recent Communications</CardTitle>
+                        <CardDescription>A log of all notifications sent to guardians.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="flex items-start gap-4">
-                            <Avatar>
-                                <AvatarImage src="https://placehold.co/100x100" data-ai-hint="person user"/>
-                                <AvatarFallback>JS</AvatarFallback>
-                            </Avatar>
-                            <div className="space-y-1">
-                                <p className="font-medium">John Smith (Parent of Jane Doe)</p>
-                                <p className="text-sm text-muted-foreground">Inquiry about fee structure.</p>
-                                <p className="text-xs text-muted-foreground">2 hours ago</p>
+                        {communications.map((comm: any) => (
+                             <div key={comm.id} className="flex items-start gap-4">
+                                <Avatar>
+                                    <AvatarImage src="https://placehold.co/100x100" data-ai-hint="person user"/>
+                                    <AvatarFallback>{comm.guardian_name?.substring(0,2) || 'G'}</AvatarFallback>
+                                </Avatar>
+                                <div className="space-y-1">
+                                    <p className="font-medium">{comm.guardian_name}</p>
+                                    <p className="font-bold text-sm">{comm.title}</p>
+                                    <p className="text-sm text-muted-foreground">{comm.message}</p>
+                                    <p className="text-xs text-muted-foreground">{new Date(comm.timestamp).toLocaleString()}</p>
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </CardContent>
                 </Card>
             </TabsContent>
              <TabsContent value="linked-students">
-                <p className="text-muted-foreground p-4">Linked students will be displayed here.</p>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Guardian-Student Links</CardTitle>
+                        <CardDescription>All registered relationships between guardians and students.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="divide-y divide-border">
+                           {linkedStudents.map((link, index) => (
+                               <li key={index} className="py-3 flex justify-between items-center">
+                                   <div>
+                                        <span className="font-semibold">{link.guardianName}</span>
+                                        <span className="text-muted-foreground"> is the </span>
+                                        <span className="font-semibold">{link.relationship}</span>
+                                        <span className="text-muted-foreground"> of </span>
+                                        <span className="font-semibold">{link.studentName}</span>
+                                   </div>
+                                    <Button variant="ghost" size="sm">Manage</Button>
+                               </li>
+                           ))}
+                        </ul>
+                    </CardContent>
+                 </Card>
             </TabsContent>
         </Tabs>
       </div>
