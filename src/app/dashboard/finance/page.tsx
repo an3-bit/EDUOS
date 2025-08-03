@@ -21,6 +21,7 @@ import BudgetManagement from '@/app/dashboard/finance/components/BudgetManagemen
 import StudentInvoices from '@/app/dashboard/finance/components/StudentInvoices';
 import PaymentProcessing from '@/app/dashboard/finance/components/PaymentProcessing';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import WalletManagement from './components/WalletManagement';
 
 async function getTransactions() {
   const response = await getPaymentRecords();
@@ -89,11 +90,12 @@ export default async function FinanceManagementPage() {
       </div>
       <div className="mt-6">
         <Tabs defaultValue="overview">
-            <TabsList className="grid w-full grid-cols-6">
+            <TabsList className="grid w-full grid-cols-7">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="invoices">Invoices</TabsTrigger>
                 <TabsTrigger value="payments">Payments</TabsTrigger>
                 <TabsTrigger value="budgets">Budgets</TabsTrigger>
+                <TabsTrigger value="wallets">Wallets</TabsTrigger>
                 <TabsTrigger value="approvals">Approvals</TabsTrigger>
                 <TabsTrigger value="reports">Reports</TabsTrigger>
             </TabsList>
@@ -108,6 +110,9 @@ export default async function FinanceManagementPage() {
             </TabsContent>
             <TabsContent value="budgets">
                  <BudgetManagement budgets={budgets} />
+            </TabsContent>
+            <TabsContent value="wallets">
+                 <WalletManagement />
             </TabsContent>
             <TabsContent value="approvals">
                  <Card>
