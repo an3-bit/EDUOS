@@ -156,12 +156,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                 <SidebarMenuSub>
                                                     {item.subItems.map(subItem => (
                                                         <SidebarMenuSubItem key={subItem.href}>
-                                                            <Link href={subItem.href} passHref asChild>
+                                                            <Link href={subItem.href} passHref legacyBehavior>
                                                                 <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
-                                                                    <>
-                                                                        <subItem.icon />
-                                                                        <span>{subItem.label}</span>
-                                                                    </>
+                                                                    <subItem.icon />
+                                                                    <span>{subItem.label}</span>
                                                                 </SidebarMenuSubButton>
                                                             </Link>
                                                         </SidebarMenuSubItem>
@@ -170,12 +168,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                             )}
                                         </>
                                     ) : (
-                                        <SidebarMenuButton asChild isActive={isLinkActive(item.href!)} tooltip={item.label}>
-                                            <Link href={item.href!}>
+                                        <Link href={item.href!} passHref legacyBehavior>
+                                            <SidebarMenuButton as="a" isActive={isLinkActive(item.href!)} tooltip={item.label}>
                                                 <item.icon />
                                                 <span>{item.label}</span>
-                                            </Link>
-                                        </SidebarMenuButton>
+                                            </SidebarMenuButton>
+                                        </Link>
                                     )}
                                 </SidebarMenuItem>
                             ))}
@@ -184,12 +182,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     <SidebarFooter>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <SidebarMenuButton asChild tooltip="Settings">
-                                    <Link href="/dashboard/settings">
+                                <Link href="/dashboard/settings" passHref legacyBehavior>
+                                    <SidebarMenuButton as="a" tooltip="Settings">
                                         <Settings />
                                         <span>Settings</span>
-                                    </Link>
-                                </SidebarMenuButton>
+                                    </SidebarMenuButton>
+                                </Link>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarFooter>
