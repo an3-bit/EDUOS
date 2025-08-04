@@ -98,10 +98,10 @@ export const columns: ColumnDef<Student>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
                 <Link href={`/dashboard/students/${student.id}`}>View student details</Link>
             </DropdownMenuItem>
-             <DropdownMenuItem>
+             <DropdownMenuItem asChild>
                 <Link href={`/dashboard/students/edit/${student.id}`}>Edit student</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

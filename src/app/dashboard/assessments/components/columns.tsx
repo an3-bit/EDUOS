@@ -97,14 +97,14 @@ export const columns: ColumnDef<Exam>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href={`/dashboard/assessments/${exam.id}/scores`}>Enter Scores</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href={`/dashboard/assessments/${exam.id}/results`}>View Results</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href={`/dashboard/assessments/edit/${exam.id}`}>Edit Exam</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>

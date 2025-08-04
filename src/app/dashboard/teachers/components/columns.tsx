@@ -1,3 +1,4 @@
+
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
@@ -99,10 +100,10 @@ export const columns: ColumnDef<Teacher>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
               <Link href={`/dashboard/teachers/${teacher.id}`}>View teacher details</Link>
             </DropdownMenuItem>
-             <DropdownMenuItem>
+             <DropdownMenuItem asChild>
                 <Link href={`/dashboard/teachers/edit/${teacher.id}`}>Edit teacher</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />

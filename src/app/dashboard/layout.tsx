@@ -53,8 +53,6 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarInset,
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton
@@ -169,7 +167,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                         </>
                                     ) : (
                                         <Link href={item.href!}>
-                                            <SidebarMenuButton as="a" isActive={isLinkActive(item.href!)} tooltip={item.label}>
+                                            <SidebarMenuButton isActive={isLinkActive(item.href!)} tooltip={item.label}>
                                                 <item.icon />
                                                 <span>{item.label}</span>
                                             </SidebarMenuButton>
@@ -183,7 +181,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         <SidebarMenu>
                             <SidebarMenuItem>
                                 <Link href="/dashboard/settings">
-                                    <SidebarMenuButton as="a" tooltip="Settings">
+                                    <SidebarMenuButton tooltip="Settings">
                                         <Settings />
                                         <span>Settings</span>
                                     </SidebarMenuButton>
