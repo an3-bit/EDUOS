@@ -156,7 +156,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                 <SidebarMenuSub>
                                                     {item.subItems.map(subItem => (
                                                         <SidebarMenuSubItem key={subItem.href}>
-                                                            <Link href={subItem.href} passHref legacyBehavior>
+                                                            <Link href={subItem.href}>
                                                                 <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
                                                                     <subItem.icon />
                                                                     <span>{subItem.label}</span>
@@ -168,7 +168,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                             )}
                                         </>
                                     ) : (
-                                        <Link href={item.href!} passHref legacyBehavior>
+                                        <Link href={item.href!}>
                                             <SidebarMenuButton as="a" isActive={isLinkActive(item.href!)} tooltip={item.label}>
                                                 <item.icon />
                                                 <span>{item.label}</span>
@@ -182,7 +182,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                     <SidebarFooter>
                         <SidebarMenu>
                             <SidebarMenuItem>
-                                <Link href="/dashboard/settings" passHref legacyBehavior>
+                                <Link href="/dashboard/settings">
                                     <SidebarMenuButton as="a" tooltip="Settings">
                                         <Settings />
                                         <span>Settings</span>
@@ -242,3 +242,4 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </SidebarProvider>
         </DataProvider>
     );
+}
