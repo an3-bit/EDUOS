@@ -7,6 +7,8 @@ import { PlusCircle, Lightbulb, AlertTriangle } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { useData } from "@/context/DataContext";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { SubjectForm } from "./components/subject-form";
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -23,9 +25,22 @@ export default function SubjectsDashboardPage() {
                     </p>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Button>
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Subject
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <PlusCircle className="mr-2 h-4 w-4" /> Add Subject
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[480px]">
+                            <DialogHeader>
+                                <DialogTitle>Add New Subject</DialogTitle>
+                                <DialogDescription>
+                                    Fill in the details below to add a new subject.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <SubjectForm />
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
 
