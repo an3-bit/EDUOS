@@ -14,7 +14,9 @@ import {
   ClipboardCheck,
   Bell,
   Shield,
-  ArrowRight
+  ArrowRight,
+  Book,
+  DollarSign
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -24,8 +26,10 @@ const modules = [
     { title: 'Student Management', description: 'Profiles, AI insights, and academic tracking.', icon: Users, link: '/dashboard/students', status: '3 New', statusVariant: 'default' },
     { title: 'Teacher Management', description: 'Professional profiles, assignments, and metrics.', icon: GraduationCap, link: '/dashboard/teachers' },
     { title: 'Finance Management', description: 'Budgets, invoices, payments, and wallet system.', icon: Wallet, link: '/dashboard/finance', status: 'Overdue', statusVariant: 'destructive' },
+    { title: 'Fee Management', description: 'Fee structures, invoices, and payments.', icon: DollarSign, link: '/dashboard/fee' },
     { title: 'Attendance', description: 'School and class attendance tracking.', icon: CheckSquare, link: '/dashboard/attendance' },
     { title: 'Classes & Academics', description: 'Class levels, streams, and promotion system.', icon: School, link: '/dashboard/academics' },
+    { title: 'Subjects', description: 'Manage subjects, assignments, and grading schemes.', icon: Book, link: '/dashboard/subjects' },
     { title: 'E-Learning', description: 'Courses, lessons, assignments, and live classes.', icon: BookOpen, link: '/dashboard/elearning', status: 'New Course', statusVariant: 'secondary' },
     { title: 'Library Management', description: 'Books, borrowing, fines, and inventory.', icon: Library, link: '/dashboard/library' },
     { title: 'Timetable', description: 'Schedule creation and room allocation.', icon: CalendarDays, link: '/dashboard/timetable', status: 'Conflicts', statusVariant: 'destructive' },

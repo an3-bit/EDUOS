@@ -25,6 +25,7 @@ interface DataContextType {
   guardianNotifications: GuardianNotification[];
   linkedStudents: any[];
   libraryBooks: Book[];
+  subjectAnalytics: any;
   loading: boolean;
 }
 
@@ -46,6 +47,7 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     guardianNotifications: [],
     linkedStudents: [],
     libraryBooks: [],
+    subjectAnalytics: {},
   });
 
   useEffect(() => {

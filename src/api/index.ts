@@ -119,6 +119,11 @@ export const uploadExamForOCR = (data: FormData, type: 'image' | 'pdf') => Promi
 export const getGuardians = () => Promise.resolve({ data: { results: [] } });
 export const getGuardianNotifications = () => Promise.resolve({ data: { results: [] } });
 
+// Subjects API Mocks
+export const getSubjects = () => Promise.resolve({ data: { results: [] } });
+export const getSubjectAnalytics = () => Promise.resolve({ data: {} });
+
+
 // Auth is mocked directly in AuthContext for now
 export const loginUser = (data: any) => Promise.resolve({ data: { access: 'mock-token' } });
 export const registerUser = (data: any) => Promise.resolve({ data: {} });

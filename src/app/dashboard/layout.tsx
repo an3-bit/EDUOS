@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   Bell,
+  Book,
   BookOpen,
   Bus,
   BedDouble,
@@ -87,6 +88,7 @@ const allMenuItems = [
     { href: "/dashboard/fee", label: "Fee Management", icon: DollarSign, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.FINANCE] },
     { href: "/dashboard/attendance", label: "Attendance", icon: CheckSquare, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
     { href: "/dashboard/academics", label: "Classes & Academics", icon: School, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
+    { href: "/dashboard/subjects", label: "Subjects", icon: Book, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER] },
     { href: "/dashboard/elearning", label: "E-Learning", icon: BookOpen, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
     { href: "/dashboard/library", label: "Library", icon: Library, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.LIBRARIAN, UserRole.STUDENT, UserRole.TEACHER] },
     { href: "/dashboard/timetable", label: "Timetable", icon: CalendarDays, roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT] },
@@ -156,8 +158,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                                                         <SidebarMenuSubItem key={subItem.href}>
                                                             <Link href={subItem.href}>
                                                                 <SidebarMenuSubButton isActive={isLinkActive(subItem.href)}>
-                                                                    <subItem.icon />
-                                                                    <span>{subItem.label}</span>
+                                                                    <>
+                                                                        <subItem.icon />
+                                                                        <span>{subItem.label}</span>
+                                                                    </>
                                                                 </SidebarMenuSubButton>
                                                             </Link>
                                                         </SidebarMenuSubItem>

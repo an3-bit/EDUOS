@@ -75,5 +75,25 @@ export const mockData = {
         { id: '1', title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', isbn: '9780743273565', status: 'Available' },
         { id: '2', title: 'To Kill a Mockingbird', author: 'Harper Lee', isbn: '9780061120084', status: 'Borrowed' },
         { id: '3', title: '1984', author: 'George Orwell', isbn: '9780451524935', status: 'Available' },
-    ]
+    ],
+    subjectAnalytics: {
+        difficult_subjects: ['Quantum Physics', 'Organic Chemistry'],
+        subjects_with_no_teachers: ['Advanced Calculus'],
+        popular_subjects: [
+            { name: 'Mathematics', enrollment: 120 },
+            { name: 'History', enrollment: 95 },
+            { name: 'Physics', enrollment: 80 },
+            { name: 'Literature', enrollment: 70 },
+        ],
+        teacher_subject_loads: [
+            { name: 'Mr. Doe', subjects: 5 },
+            { name: 'Ms. Smith', subjects: 4 },
+            { name: 'Dr. Jones', subjects: 6 },
+        ],
+        coverage_percentages: [
+            { name: 'Mathematics', coverage: 85 },
+            { name: 'History', coverage: 92 },
+            { name: 'Physics', coverage: 78 },
+        ]
+    }
 };
